@@ -1,0 +1,110 @@
+# Copyright (C) 2016 Xavier Zalawa
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Thistle 0.1.0\n"
+"POT-Creation-Date: 2016-05-17 22:02+0100\n"
+"PO-Revision-Date: 2016-05-17 22:02+0100\n"
+"Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e;_x;_ex;_n:1,2;_nx:1,2;_n_noop:1,2;_nx_noop:1,2;"
+"esc_html__;esc_html_e;esc_html_x;esc_attr__;esc_attr_e;esc_attr_x\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
+
+#: ../includes/thumbnail.php:35
+msgid "Thumbnail"
+msgstr "Miniature"
+
+#: ../includes/seo.php:17 ../includes/seo.php:72
+msgid "Description"
+msgstr "Description"
+
+#: ../includes/seo.php:21 ../includes/seo.php:73
+msgid ""
+"The description is used to fill the <code>&lt;meta&gt;</code> description "
+"and the Open Graph description of your front page (latest posts)."
+msgstr ""
+"La description est utilisé pour remplir le <code>&lt;meta&gt;</code> "
+"description et l’Open Graph de votre page d’accueil (derniers articles)."
+
+#: ../includes/seo.php:268
+#, php-format
+msgid "%s%s, author at %s"
+msgstr "%s%s, auteur pour %s"
+
+#: ../includes/seo.php:279
+msgid "Images"
+msgstr "Images"
+
+#: ../includes/seo.php:281
+msgid "Video"
+msgstr "Vidéos"
+
+#: ../includes/seo.php:283
+msgid "Audio"
+msgstr "Audio"
+
+#: ../includes/seo.php:291
+#, php-format
+msgid "%d result has been found for “%s”"
+msgid_plural "%d results have been found for “%s”"
+msgstr[0] "%d résultat correspond à la recherche « %s »"
+msgstr[1] "%d résultats correspondent à la recherche « %s »"
+
+#: ../includes/seo.php:293
+#, fuzzy, php-format
+msgid "No results have been found for “%s”"
+msgstr "Aucun contenu n’a été trouvé pour la recherche « %s »"
+
+#: ../includes/seo.php:300
+msgid "Oops! We can’t seem to find the page you’re looking for"
+msgstr "Désolé, le contenu que vous recherchez n'existe pas"
+
+#: ../includes/author.php:16
+msgid "Author"
+msgstr "Auteur"
+
+#: ../includes/excerpt.php:120
+msgid "Excerpt"
+msgstr "Extrait"
+
+#: ../includes/gallery-shortcode.php:162
+msgid "No items found."
+msgstr "Aucun élément trouvé."
+
+#: ../includes/back-compat.php:32
+#, php-format
+msgid ""
+"Thistle requires at least WordPress version 4.5. You are running version %s. "
+"Please upgrade and try again."
+msgstr ""
+"Thistle ne fonctionne qu'à partir de WordPress 4.5. Vous utilisez la version "
+"%s. Veuillez mettre à jour et réessayer. "
+
+#: ../includes/search.php:37
+msgid "Search"
+msgstr "Recherche"
+
+#~ msgid "In a few words, explain what this site is about."
+#~ msgstr "lol"
+
+#~ msgid "Oops! That content can’t be found"
+#~ msgstr "Désolé ! Le contenu n’a pas pu être trouvé."
+
+#~ msgid "Sorry,"
+#~ msgstr "Pardon"
+
+#~ msgid "One result have been found for &ldquo;%s&rdquo;"
+#~ msgid_plural "%d results have been found for &ldquo;%s&rdquo;"
+#~ msgstr[0] ""
+#~ "Un seul contenu correspond à la recherche &laquo;&nbsp;%s&nbsp;&raquo;"
+#~ msgstr[1] ""
+#~ "%d résultats correspondent à la recherche &laquo;&nbsp;%s&nbsp;&raquo;"
