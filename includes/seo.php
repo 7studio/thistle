@@ -9,7 +9,10 @@ if ( ! function_exists( 'thistle_register_blogdescription_setting' ) ) {
 		register_setting(
 			'general',
 			'thistle_blogdescription',
-			'thistle_sanitize_option'
+            // Because the filter is added with one arg but applied with three.
+			function( $value ) {
+                return thistle_sanitize_option( $value, 'thistle_blogdescription', get_option( 'thistle_blogdescription', '' ) );
+            }
 		);
 
 		add_settings_field(
@@ -65,7 +68,10 @@ if ( ! function_exists( 'thistle_customize_blogdescription_setting' ) ) {
 			'default'           => get_option( 'thistle_blogdescription', '' ),
 			'type'              => 'option',
 			'capability'        => 'manage_options',
-			'sanitize_callback' => 'thistle_sanitize_option'
+			// Because the filter is added with one arg but applied with three.
+            'sanitize_callback' => function( $value ) {
+                return thistle_sanitize_option( $value, 'thistle_blogdescription', get_option( 'thistle_blogdescription', '' ) );
+            }
 		) );
 
 		$wp_customize->add_control( 'thistle_blogdescription', array(
@@ -259,7 +265,7 @@ if ( ! function_exists( 'thistle_document_title_parts' ) ) {
 		// If on an author archive
 		} elseif ( is_author() && $author = get_queried_object() ) {
 
-			if ( $author->display_name != ( $author->first_name . ' ' . $author->last_name ) && $author->display_name != ( $author->last_name . ' ' . $author->first_name ) ) {
+			if ( ( $author->first_name . $author->last_name ) != '' && $author->display_name != ( $author->first_name . ' ' . $author->last_name ) && $author->display_name != ( $author->last_name . ' ' . $author->first_name ) ) {
 				$full_name = ' (' . $author->first_name . ' ' . $author->last_name . ')';
 			} else {
 				$full_name = '';

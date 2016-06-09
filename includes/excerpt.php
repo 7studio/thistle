@@ -121,7 +121,7 @@ if ( ! function_exists( 'thistle_add_postexcerpt_meta_box' ) ) {
 	            'post_excerpt_meta_box',
 	            null,
 	            'after_title',
-				'core'
+				'high'
 	        );
 	    }
 	}

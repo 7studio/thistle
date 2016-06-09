@@ -197,8 +197,8 @@ if ( ! function_exists( 'thistle_get_facebook_sharelink' ) ) {
 	 * @param int|WP_Post $id Post ID or post object. Default is 0, which means the current post
 	 * @return string A sharelink or an empty string if required request parameters by Facebook are not past.
 	 */
-	function thistle_get_facebook_sharelink( $post = null ) {
-		$post = get_post( $post );
+	function thistle_get_facebook_sharelink( $id = 0 ) {
+		$post = get_post( $id );
 
 		if ( ! empty( $post->ID ) ) {
 			$sharelink = 'https://www.facebook.com/sharer/sharer.php?';
@@ -245,7 +245,7 @@ if ( ! function_exists( 'thistle_get_twitter_sharelink' ) )  {
 	 * @return string A sharelink or an empty string if required request parameters by Twitter are not past.
 	 */
 	function thistle_get_twitter_sharelink( $id = 0 ) {
-		$post = get_post( $post );
+		$post = get_post( $id );
 
 		if ( ! empty( $post->ID ) ) {
 			$post_tags = get_the_terms( $post->ID, 'post_tag' );
@@ -294,7 +294,7 @@ if ( ! function_exists( 'thistle_the_twitter_sharelink' ) ) {
 	function thistle_the_twitter_sharelink() {
 		$sharelink = apply_filters( 'thistle_the_twitter_sharelink', thistle_get_twitter_sharelink() );
 
-		if ( empty( $sharelink ) ) {
+		if ( ! empty( $sharelink ) ) {
 			echo esc_url( $sharelink );
 		}
 	}
@@ -461,7 +461,7 @@ if ( ! function_exists( 'thistle_the_pinterest_sharelink' ) ) {
 	function thistle_the_pinterest_sharelink() {
 		$sharelink = apply_filters( 'thistle_the_pinterest_sharelink', thistle_get_pinterest_sharelink() );
 
-		if ( empty( $sharelink ) ) {
+		if ( ! empty( $sharelink ) ) {
 			echo esc_url( $sharelink );
 		}
 	}
