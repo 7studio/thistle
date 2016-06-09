@@ -35,6 +35,49 @@ if ( ! function_exists( 'thistle_mce_external_plugins' ) ) {
 }
 add_filter( 'mce_external_plugins', 'thistle_mce_external_plugins' );
 
+if ( ! function_exists( 'thistle_remove_tiny_mce_colorpicker' ) ) {
+    /**
+     * Pulls out the colorpicker plugin from TinyMCE.
+     * Without this plugin the end user cannot select a custom color.
+     *
+     * @link https://www.tinymce.com/docs/plugins/colorpicker/
+     *
+     * @param array $plugins An array of default TinyMCE plugins.
+     * @return array
+     */
+    function thistle_remove_tiny_mce_colorpicker( $plugins ) {
+        return array_diff( $plugins, array( 'colorpicker' ) );
+    }
+}
+add_filter( 'tiny_mce_plugins', 'thistle_remove_tiny_mce_colorpicker' );
+
+if ( ! function_exists( 'thistle_tiny_mce_textcolor_map' ) ) {
+    /**
+     * Specifies a map of the text colors that will appear in the grid of
+     * the textcolor plugin.
+     * If the map is empty, the textcolor plugin is pulled out.
+     *
+     * @link https://www.tinymce.com/docs/plugins/textcolor/
+     *
+     * @param $mceInit array An array with TinyMCE config.
+     * @return array
+     */
+    function thistle_tiny_mce_textcolor_map( $mceInit ) {
+        $textcolor_map = apply_filters( 'thistle_tiny_mce_textcolor_map', array() );
+
+        if ( ! empty( $textcolor_map ) ) {
+            $mceInit['textcolor_map'] = wp_json_encode( $textcolor_map );
+        } else {
+            $mceInit['plugins'] = explode( ',' , $mceInit['plugins'] );
+            $mceInit['plugins'] = array_diff( $mceInit['plugins'], array( 'textcolor' ) );
+            $mceInit['plugins'] = implode( ',' , $mceInit['plugins'] );
+        }
+
+        return $mceInit;
+    }
+}
+add_filter( 'tiny_mce_before_init', 'thistle_tiny_mce_textcolor_map' );
+
 if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
 	/**
 	 * Setups TinyMCE.
