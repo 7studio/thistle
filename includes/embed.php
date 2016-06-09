@@ -143,12 +143,17 @@ if ( ! function_exists( 'thistle_oembed_remove_maxheight' ) ) {
 	/**
 	 * Removes size arguments from the oEmbed URL to be fetched.
 	 * That will allow external services to give us their default widget sizes.
+     *
+     * There are two exceptions (YouTube and Dailymotion) which need these arguments
+     * to don't return very small version of embeds.
 	 *
 	 * @param string $provider URL of the oEmbed provider.
 	 * @return string
 	 */
 	function thistle_oembed_remove_maxheight( $provider ) {
-		$provider = remove_query_arg( array( 'maxwidth', 'maxheight' ), $provider );
+        if ( ! preg_match( '/http[s]?:\/\/(?:www\.)?(youtube|dailymotion)\.com/i', $provider ) ) {
+		  $provider = remove_query_arg( array( 'maxwidth', 'maxheight' ), $provider );
+        }
 
 		return $provider;
 	}
