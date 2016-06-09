@@ -1,5 +1,42 @@
 <?php
 
+if ( ! function_exists( 'thistle_run_shortcode' ) ) {
+    /**
+     * Processes all shortcodes at the same time (after `wpautop`).
+     *
+     * By default, WordPress registers the [embed] shortcode twice:
+     * 1. With an empty callback hook which will remove the shortcode into the content
+     *    when the filter `do_shortcode` will run AFTER `wpautop`.
+     * 2. With a specific callback hook BEFORE `wpautop` which will remove all existing shortcodes,
+     *    register the [embed] shortcode, call do_shortcode(), and then
+     *    re-register the old shortcodes.
+     *
+     * It seems this is the expected behaviour that the [embed] shortcode needs
+     * to be run earlier than other shortcodes but in this case all `<script>`
+     * tags from oEmbed are wrapped into `<p>` tag and brake the specific HTML
+     * markup for the RWD.
+     *
+     * @global WP_Embed $wp_embed
+     */
+    function thistle_run_shortcode() {
+        global $wp_embed;
+
+        // Removes all filters`.
+        remove_filter( 'the_content', 'do_shortcode', 11 );
+        remove_filter( 'the_content', array( $wp_embed, 'run_shortcode' ), 8 );
+
+        // Adds the [embed] shortcode filter between `wpautop` and `do_shortcode`.
+        add_filter( 'the_content', array( $wp_embed, 'run_shortcode' ), 11 );
+
+        /**
+         * Restores the filter for all shortcodes after the [embed] one to do not
+         * return an empty string for the [embed] shortcodes.
+         */
+        add_filter( 'the_content', 'do_shortcode', 12 );
+    }
+}
+add_action( 'init', 'thistle_run_shortcode' );
+
 if ( ! function_exists( 'thistle_get_embed' ) ) {
 	/**
 	 * Builds the Embed shortcode output.
