@@ -95,3 +95,34 @@ if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
 	}
 }
 add_filter( 'tiny_mce_before_init', 'thistle_tiny_mce_before_init' );
+
+if ( ! function_exists( 'thistle_filter_image_link_rel' ) ) {
+    /**
+     * Removes all invalid values into the rel attribute before
+     * the image HTML markup will be sent to the editor.
+     *
+     * By default WordPress adds two invalid link types values:
+     * `attachment` and `wp-att-%post_id%`.
+     *
+     * @param string $html The image HTML markup to send.
+     * @return string
+     */
+    function thistle_filter_image_link_rel( $html ) {
+        $allowed_rels = array( 'alternate', 'archives', 'author', 'bookmark', 'external', 'first', 'help', 'index', 'last', 'license', 'next', 'nofollow', 'noreferrer', 'prefetch', 'prev', 'search', 'sidebar', 'tag', 'up' );
+
+        if ( preg_match('/rel="([^"]*)"/', $html, $matches ) ) {
+            $rel = explode( ' ', $matches[1] );
+            $rel = array_intersect( $rel, $allowed_rels );
+            $rel = implode( ' ', $rel );
+
+            if ( $rel == '' ) {
+                $html = str_replace( ' ' . $matches[0], '', $html );
+            } else {
+                $html = str_replace( $matches[1], $rel, $html );
+            }
+        }
+
+        return $html;
+    }
+}
+add_filter( 'image_send_to_editor', 'thistle_filter_image_link_rel' );
