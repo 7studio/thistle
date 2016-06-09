@@ -174,6 +174,7 @@ if ( ! function_exists( 'thistle_oembed_add_facebook_provider' ) ) {
 			'#https?://www\.facebook\.com/.*/videos/.*#i'     => 'https://www.facebook.com/plugins/video/oembed.json/',
 			'#https?://www\.facebook\.com/.*/posts/.*#i'      => 'https://www.facebook.com/plugins/post/oembed.json/',
 			'#https?://www\.facebook\.com/.*/activity/.*#i'   => 'https://www.facebook.com/plugins/post/oembed.json/',
+            '#https?://www\.facebook\.com/.*/photos/.*#i'     => 'https://www.facebook.com/plugins/post/oembed.json/',
 			'#https?://www\.facebook\.com/photo(s/|.php).*#i' => 'https://www.facebook.com/plugins/post/oembed.json/',
 			'#https?://www\.facebook\.com/permalink.php.*#i'  => 'https://www.facebook.com/plugins/post/oembed.json/',
 			'#https?://www\.facebook\.com/media/.*#i'         => 'https://www.facebook.com/plugins/post/oembed.json/',
@@ -187,6 +188,31 @@ if ( ! function_exists( 'thistle_oembed_add_facebook_provider' ) ) {
 	}
 }
 add_action( 'init', 'thistle_oembed_add_facebook_provider' );
+
+if ( ! function_exists( 'thistle_oembed_facebook_album_url' ) ) {
+    /**
+     * Catchs the new photos album URL of Facebook and gives the old one to
+     * the API.
+     *
+     * E.g.:
+     * `/{username}/photos/?tab=album&album_id={set-id}` -> `/media/set?set={set-id}`
+     *
+     * @param string $provider URL of the oEmbed provider.
+     * @param string $url      URL of the content to be embedded.
+     * @return string
+     */
+    function thistle_oembed_facebook_album_url( $provider, $url ) {
+        if ( preg_match( '/^https?:\/\/www\.facebook\.com\/(?:.*)\/photos\/\?(?:.*)album_id=([0-9]*)$/', $url, $matches ) ) {
+            $url = 'https://www.facebook.com/media/set/?set=a.' . $matches[1];
+
+            $provider = remove_query_arg( 'url', $provider );
+            $provider = add_query_arg( 'url', $url, $provider );
+        }
+
+        return $provider;
+    }
+}
+add_filter( 'oembed_fetch_url', 'thistle_oembed_facebook_album_url', 10, 2 );
 
 if ( ! function_exists( 'thistle_oembed_dataparse' ) ) {
 	/**
