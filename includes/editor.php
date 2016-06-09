@@ -87,7 +87,7 @@ if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
 	 */
 	function thistle_tiny_mce_before_init( $mceInit ) {
 		$mceInit['body_class'] = 'Wysiwyg';
-		$mceInit['toolbar1'] = 'formatselect,forecolor,|,bold,italic,strikethrough,|,alignleft,aligncenter,alignright,alignfull,|,link,unlink,anchor,|,bullist,numlist,|,blockquote,hr,|,table,|,outdent,indent,|,wp_more,|,pastetext,removeformat,|,undo,redo,wp_help';
+		$mceInit['toolbar1'] = 'formatselect,forecolor,|,bold,italic,strikethrough,subscript,superscript,|,alignleft,aligncenter,alignright,alignfull,|,link,unlink,anchor,|,bullist,numlist,|,blockquote,hr,|,table,|,outdent,indent,|,wp_more,wp_page,|,charmap,pastetext,removeformat,|,undo,redo,visualblocks,help,|,fullscreen';
 		$mceInit['toolbar2'] = '';
 		$mceInit['block_formats'] = 'Titre 2=h2;Titre 3=h3;Paragrahe=p';
 
