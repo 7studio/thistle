@@ -9,8 +9,11 @@ if ( ! function_exists( 'thistle_mce_external_plugins' ) ) {
 	 * and after parent theme.
 	 *
 	 * @link https://codex.wordpress.org/TinyMCE
+     *
+     * @param array $external_plugins An array of external TinyMCE plugins.
+     * @return array
 	 */
-	function thistle_mce_external_plugins( $plugins ) {
+	function thistle_mce_external_plugins( $external_plugins ) {
 		$new_plugins = apply_filters( 'thistle_mce_external_plugins', array( 'table' ) );
 		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
@@ -19,15 +22,15 @@ if ( ! function_exists( 'thistle_mce_external_plugins' ) ) {
 
 			// Searches in the child theme.
 			if ( file_exists( (get_stylesheet_directory() . $file) ) ) {
-				$plugins[ $P ] = get_stylesheet_directory_uri() . $file;
+				$external_plugins[ $P ] = get_stylesheet_directory_uri() . $file;
 
 			// Searches in the parent theme.
 			} elseif ( file_exists( (get_template_directory() . $file) ) ) {
-				$plugins[ $P ] = get_template_directory_uri() . $file;
+				$external_plugins[ $P ] = get_template_directory_uri() . $file;
 			}
 		}
 
-		return $plugins;
+		return $external_plugins;
 	}
 }
 add_filter( 'mce_external_plugins', 'thistle_mce_external_plugins' );
