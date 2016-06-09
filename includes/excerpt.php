@@ -43,14 +43,39 @@ if ( ! function_exists( 'thistle_trim_excerpt' ) ) {
 	 *
 	 * @see wp-includes/default-filters.php#144
  	 * @see wp-includes/formatting.php#L2897
+     *
+     * @global int $page
+     * @global int $more
+     * @global int $multipage
 	 *
 	 * @param string $text        The trimmed text.
 	 * @param string $raw_excerpt The text prior to trimming.
 	 */
 	function thistle_trim_excerpt( $text, $raw_text ) {
+        global $page, $more, $multipage;
+
 		// Excerpts come from `post_content`.
 		if ( $raw_text == '' ) {
-			$text = get_the_content('');
+            /**
+             * Respects the 'more' tag everytime. It assures to have the
+             * same excerpt on the archive page and on the post page when
+             * it comes from `$post->post_content`.
+             *
+             * By default, WordPress forces full post content only when
+             * viewing the permalink for the $post.
+             * Otherwise it respects the 'more' tag.
+             */
+            $more = 0;
+
+            /**
+             * Ensures that the excerpt comes from the first page even if
+             * the post is splited into multiple pages.
+             */
+            $page = 1;
+            $multipage = 0;
+
+			$text = get_the_content( '' );
+            $text = str_replace(']]>', ']]&gt;', $text);
 		}
 
 		$excerpt_length = apply_filters( 'excerpt_length', 55 );
@@ -63,7 +88,7 @@ if ( ! function_exists( 'thistle_trim_excerpt' ) ) {
 		return $text;
 	}
 }
-add_filter( 'wp_trim_excerpt', 'thistle_trim_excerpt', 10, 2 );
+add_filter( 'wp_trim_excerpt', 'thistle_trim_excerpt', 11, 2 );
 
 /**
  * Moves the excerpt meta box above the editor.
