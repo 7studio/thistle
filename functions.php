@@ -402,3 +402,4 @@ require_once 'includes/seo.php';
 require_once 'includes/share.php';
 require_once 'includes/thumbnail.php';
 require_once 'includes/users.php';
+require_once 'includes/admin.php';
