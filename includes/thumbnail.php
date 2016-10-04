@@ -81,7 +81,7 @@ if ( ! function_exists( 'thistle_set_column_thumbnail_styles' ) ) {
         <?php
     }
 }
-add_action( 'admin_head', 'thistle_set_column_thumbnail_styles' );
+add_action( 'admin_head-edit.php', 'thistle_set_column_thumbnail_styles' );
 
 if ( ! function_exists( 'thistle_get_enclosure_metadata' ) ) {
     /**

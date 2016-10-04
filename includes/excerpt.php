@@ -203,4 +203,5 @@ if ( ! function_exists( 'thistle_postexcerpt_meta_box_assets' ) ) {
 	<?php
 	}
 }
-add_action( 'admin_head', 'thistle_postexcerpt_meta_box_assets' );
+add_action( 'admin_head-post.php', 'thistle_postexcerpt_meta_box_assets' );
+add_action( 'admin_head-post-new.php', 'thistle_postexcerpt_meta_box_assets' );
