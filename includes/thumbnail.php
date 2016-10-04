@@ -29,10 +29,12 @@ if ( ! function_exists( 'thistle_add_column_thumbnail' ) ) {
          $screen = get_current_screen();
 
         if ( post_type_supports( $screen->post_type, 'thumbnail' ) ) {
+            $post_type = get_post_type_object( $screen->post_type );
+
             $last_post_column_key = array_pop( (array_keys( $posts_columns )) );
             $last_post_column_value = array_pop( $posts_columns );
 
-            $posts_columns['thumbnail'] = __( 'Thumbnail' );
+            $posts_columns['thumbnail'] = $post_type->labels->featured_image;
             $posts_columns[ $last_post_column_key ] = $last_post_column_value;
         }
 
