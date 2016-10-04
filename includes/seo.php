@@ -100,7 +100,7 @@ if ( ! function_exists( 'thistle_noindex_follow' ) ) {
 	function thistle_noindex_follow() {
 		global $paged;
 
-		if ( is_date() || is_search() || is_404() || $paged >= 2 ) {
+		if ( is_date() || is_search() || is_404() || $paged >= 2 || apply_filters( 'thistle_noindex_follow', false ) ) {
 			add_action( 'wp_head', 'wp_no_robots' );
 		}
 	}
@@ -142,12 +142,13 @@ if ( ! function_exists( 'thistle_get_description_meta_tag' ) ) {
 		}
 
 		// If on the home page
-		if ( is_home() ) {
+		if ( is_front_page() ) {
 			$description = get_option( 'thistle_blogdescription', '' );
 
 		// If on a single post or a single page
-		} elseif ( is_singular( array( 'post', 'page' ) ) ) {
-			$post = get_post();
+		} elseif ( is_home() || is_singular( array( 'post', 'page' ) ) ) {
+			$post = get_queried_object();
+
 			// Allows us to use `get_the_excerpt()` and more outside a loop
 			setup_postdata( $GLOBALS['post'] =& $post );
 
@@ -221,8 +222,7 @@ if ( ! function_exists( 'thistle_document_title_parts' ) ) {
 	 *
 	 * Applied rules:
 	 *
-	 * - Home (page): %posts->post_title% – %options->blogname%
-	 * - Home (posts): %options->blogdescription% – %options->blogname%
+	 * - Home (posts or page): %options->blogdescription% – %options->blogname%
 	 * - Page (for posts): %posts->post_title% – %options->blogname%
 	 * - Post: %posts->post_title% – %options->blogname%
 	 * - Author: %users->display_name% (%usermeta->first_name% %usermeta->last_name%), author at %options->blogname%
@@ -247,16 +247,18 @@ if ( ! function_exists( 'thistle_document_title_parts' ) ) {
 	function thistle_document_title_parts( $parts ) {
 		global $wp_query;
 
-		unset( $parts['page'], $parts['tagline'], $parts['site'] );
+        $parts = array(
+            'title' => '',
+            'site'  => get_bloginfo( 'name', 'display' )
+        );
 
-		if ( is_home() ) {
+        // If on the front page, use the site title.
+		if ( is_front_page() ) {
 			$parts['title'] = get_bloginfo( 'description', 'display' );
-			$parts['site'] = get_bloginfo( 'name', 'display' );
 
-		// If on a single post or a single page
-		} elseif ( is_singular( array( 'post', 'page' ) ) ) {
-			$parts['title'] = get_the_title();
-			$parts['site'] = get_bloginfo( 'name', 'display' );
+		// If on the blog page that is not the homepage or a single post or a single page.
+		} elseif ( is_home() || is_singular( array( 'post', 'page' ) ) ) {
+			$parts['title'] = single_post_title( '', false );
 
 		// If on a category or tag archive
 		} elseif ( is_category() || is_tag() ) {
@@ -272,13 +274,13 @@ if ( ! function_exists( 'thistle_document_title_parts' ) ) {
 			}
 
 			$parts['title'] = sprintf( __( '%s%s, author at %s', THISTLE_TEXT_DOMAIN ), $author->display_name, $full_name, get_bloginfo( 'name', 'display' ) );
+            $parts['site'] = '';
 
 		// If on an attachment
 		} elseif ( is_attachment() ) {
 			$post = get_post();
 
-			$parts['title'] = get_the_title();
-
+			$parts['title'] = single_post_title( '', false );
 			$parts['site'] = '';
 
 			if ( mb_strpos( $post->post_mime_type, 'image' ) === 0 ) {
@@ -299,13 +301,34 @@ if ( ! function_exists( 'thistle_document_title_parts' ) ) {
 				$parts['title'] = sprintf( __( 'No results have been found for “%s”', THISTLE_TEXT_DOMAIN ), get_search_query() );
 			}
 
-			$parts['site'] = get_bloginfo( 'name', 'display' );
-
 		// If it's a 404 page
 		} elseif ( is_404() ) {
-			$title['title'] = __( 'Oops! We can’t seem to find the page you’re looking for', THISTLE_TEXT_DOMAIN );
-			$parts['site'] = get_bloginfo( 'name', 'display' );
+			$parts['title'] = __( 'Oops! We can’t seem to find the page you’re looking for', THISTLE_TEXT_DOMAIN );
 		}
+
+        /**
+         * Filters the parts of the document title.
+         *
+         * @param array $title {
+         *     The document title parts.
+         *
+         *     @type string|array $title Title of the viewed page.
+         *     @type string       $site  Site title.
+         * }
+         */
+        $parts = apply_filters( 'thistle_document_title_parts', $parts );
+
+        /**
+         * Flattens the "title" part if it's an array to be processed
+         * correctly by the `wp_get_document_title` function.
+         */
+        if ( is_array( $parts['title'] ) ) {
+            $flattened_parts = array();
+
+            array_walk_recursive( $parts, function ( $part ) use( &$flattened_parts ) { $flattened_parts[] = $part; } );
+
+            $parts = $flattened_parts;
+        }
 
 		return $parts;
 	}
