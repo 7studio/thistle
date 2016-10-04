@@ -267,6 +267,8 @@ if ( ! function_exists( 'thistle_disable_emoji' ) ) {
 	    remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
 	    remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
 
+        add_filter( 'emoji_svg_url', '__return_empty_string' );
+
 	    add_filter( 'tiny_mce_plugins', function ( $plugins ) { return array_diff( $plugins, array( 'wpemoji' ) ); } );
 	}
 }
