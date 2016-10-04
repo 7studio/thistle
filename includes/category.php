@@ -21,26 +21,3 @@ if ( ! function_exists( 'thistle_widget_categories_current_category' ) ) {
 }
 add_filter( 'widget_categories_args', 'thistle_widget_categories_current_category' );
 add_filter( 'widget_categories_dropdown_args', 'thistle_widget_categories_current_category' );
-
-if ( ! function_exists( 'thistle_category_301' ) ) {
-	/**
-	 * Redirects category URLs from hackable post URLs (e.g.: `/%category%/%postname%-%post_id%/`)
-	 * to their specific URLs: `/categorie/%category%/`.
-	 *
-	 * @global WP $wp
-	 */
-	function thistle_category_301() {
-		global $wp;
-
-	 	if ( is_category() ) {
-	 		$permalink = get_category_link( get_queried_object_id() );
-			$request = trailingslashit( site_url() . '/' . $wp->request );
-
-			if ( $request !== $permalink ) {
-				wp_redirect( $permalink, 301 );
-				exit;
-			}
-	 	}
-	}
-}
-add_action( 'template_redirect', 'thistle_category_301' );
