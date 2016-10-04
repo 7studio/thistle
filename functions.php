@@ -401,3 +401,4 @@ require_once 'includes/search.php';
 require_once 'includes/seo.php';
 require_once 'includes/share.php';
 require_once 'includes/thumbnail.php';
+require_once 'includes/users.php';
