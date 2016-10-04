@@ -67,12 +67,14 @@ if ( ! function_exists( 'thistle_active_theme' ) ) {
 			'date_format'             => 'j F Y',
 			'time_format'             => 'G \h i \m\i\n',
 			'start_of_week'           => 1,
-			'permalink_structure'     => '/%category%/%postname%-%post_id%/',
+			'permalink_structure'     => '/%category%/%postname%/',
 			'category_base'           => 'categorie',
 			'tag_base'                => 'tag',
 			'image_default_link_type' => 'none',
 			'users_can_register'      => 0,
-			'admin_email'             => 'xavier@7studio.fr'
+			'admin_email'             => 'xavier@7studio.fr',
+            'avatar_default'          => 'blank',
+            'rss_use_excerpt'         => 1
 		);
 
 		foreach ( $options as $option => $newvalue ) {
