@@ -86,10 +86,13 @@ if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
 	 * @return array
 	 */
 	function thistle_tiny_mce_before_init( $mceInit ) {
+        // Fix unquoted keys
+        $mceInit['formats'] = preg_replace("/(?<!\"|'|\w)([a-zA-Z0-9_]+?)(?!\"|'|\w)\s?:/", "\"$1\":",  $mceInit['formats'] );
+
 		$mceInit['body_class'] = 'Wysiwyg';
 		$mceInit['toolbar1'] = 'formatselect,forecolor,|,bold,italic,strikethrough,subscript,superscript,|,alignleft,aligncenter,alignright,alignfull,|,link,unlink,anchor,|,bullist,numlist,|,blockquote,hr,|,table,|,outdent,indent,|,wp_more,wp_page,|,charmap,pastetext,removeformat,|,undo,redo,visualblocks,help,|,fullscreen';
 		$mceInit['toolbar2'] = '';
-		$mceInit['block_formats'] = 'Titre 2=h2;Titre 3=h3;Paragrahe=p';
+        $mceInit['block_formats'] = 'Titre 2=h2;Titre 3=h3;Paragraphe=p';
 
 		return $mceInit;
 	}
