@@ -444,3 +444,43 @@ if ( ! function_exists( 'thistle_slideshare_shortcode' ) ) {
 	}
 }
 add_shortcode( 'slideshare', 'thistle_slideshare_shortcode');
+
+if ( ! function_exists( 'thistle_enqueue_wpembed_script' ) ) {
+    /**
+     * Loads the `wp-embed` script only when the Post content contains
+     * an [embed] shortcode which is a WordPress inline HTML embed.
+     *
+     * This behaviour can be an issue if you display the full posts into a loop.
+     *
+     * @global WP_Embed $wp_embed
+     */
+     function thistle_enqueue_wpembed_script() {
+        global $wp_embed;
+
+        if ( is_single() || is_page() ) {
+            $post = get_post( null );
+
+            if ( $post && has_shortcode( $post->post_content, 'embed' ) ) {
+                 $content = $wp_embed->run_shortcode( get_the_content() );
+
+                if ( mb_strpos( $content, 'wp-embedded-content' ) !== false ) {
+                    wp_enqueue_script( 'wp-embed' );
+                }
+            }
+        }
+     }
+}
+add_action( 'wp_head', 'thistle_enqueue_wpembed_script', 11 );
+
+if ( ! function_exists( 'thistle_dequeue_wpembed_script' ) ) {
+    /**
+     * Removes the enqueued script `wp-embed`.
+     *
+     * This JavaScript is automaticaly added by WordPress all the time
+     * to work with other WordPress inline HTML embeds.
+     */
+     function thistle_dequeue_wpembed_script() {
+         remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+     }
+ }
+add_action( 'init', 'thistle_dequeue_wpembed_script' );
