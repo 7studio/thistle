@@ -293,6 +293,19 @@ add_action( 'admin_enqueue_scripts', 'thistle_disable_opensans' ); // Admin
 add_action( 'login_init', 'thistle_disable_opensans' ); // Login
 add_action( 'wp_enqueue_scripts', 'thistle_disable_opensans' ); // Admin Toolbar when watching site
 
+if ( ! function_exists( 'thistle_remove_postcustom_support' ) ) {
+    /**
+     * Removes support for Custom Fields on posts.
+     *
+     * IMHO, this WordPress feature is not a good idea because you can
+     * modify the key of the post meta by error and break the behaviour.
+     */
+    function thistle_remove_postcustom_support() {
+        remove_post_type_support( 'post', 'custom-fields' );
+    }
+}
+add_action( 'init', 'thistle_remove_postcustom_support' );
+
 if ( ! function_exists( 'thistle_register_svgxuse' ) ) {
     /**
      * Registers script to use svgxuse.
