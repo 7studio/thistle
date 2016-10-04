@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
-"POT-Creation-Date: 2016-05-17 22:02+0100\n"
-"PO-Revision-Date: 2016-05-17 22:02+0100\n"
+"POT-Creation-Date: 2016-09-09 10:13+0100\n"
+"PO-Revision-Date: 2016-09-09 10:16+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,50 +18,66 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
+#: ../includes/paged.php:194
+msgid "Pages:"
+msgstr ""
+
+#: ../includes/paged.php:200
+msgid "Next page"
+msgstr ""
+
+#: ../includes/paged.php:201
+msgid "Previous page"
+msgstr ""
+
+#: ../includes/paged.php:215
+msgid "View all"
+msgstr ""
+
 #: ../includes/thumbnail.php:35
 msgid "Thumbnail"
 msgstr ""
 
-#: ../includes/seo.php:17 ../includes/seo.php:72
+#: ../includes/seo.php:20 ../includes/seo.php:78
 msgid "Description"
 msgstr ""
 
-#: ../includes/seo.php:21 ../includes/seo.php:73
+#: ../includes/seo.php:24 ../includes/seo.php:79
 msgid ""
 "The description is used to fill the <code>&lt;meta&gt;</code> description "
 "and the Open Graph description of your front page (latest posts)."
 msgstr ""
 
-#: ../includes/seo.php:268
+#: ../includes/seo.php:275
 #, php-format
 msgid "%s%s, author at %s"
 msgstr ""
 
-#: ../includes/seo.php:279
+#: ../includes/seo.php:286
 msgid "Images"
 msgstr ""
 
-#: ../includes/seo.php:281
+#: ../includes/seo.php:288
 msgid "Video"
 msgstr ""
 
-#: ../includes/seo.php:283
+#: ../includes/seo.php:290
 msgid "Audio"
 msgstr ""
 
-#: ../includes/seo.php:291
+#: ../includes/seo.php:298
 #, php-format
 msgid "%d result has been found for “%s”"
 msgid_plural "%d results have been found for “%s”"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../includes/seo.php:293
+#: ../includes/seo.php:300
 #, php-format
 msgid "No results have been found for “%s”"
 msgstr ""
 
-#: ../includes/seo.php:300
+#: ../includes/seo.php:305
 msgid "Oops! We can’t seem to find the page you’re looking for"
 msgstr ""
 
@@ -69,12 +85,26 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: ../includes/excerpt.php:120
+#: ../includes/excerpt.php:145
 msgid "Excerpt"
 msgstr ""
 
-#: ../includes/gallery-shortcode.php:162
+#: ../includes/gallery-shortcode.php:197
 msgid "No items found."
+msgstr ""
+
+#: ../includes/users.php:43
+msgctxt "User role"
+msgid "Administrator (customer)"
+msgstr ""
+
+#: ../includes/users.php:73 ../includes/users.php:74
+msgctxt "User role"
+msgid "Administrator"
+msgstr ""
+
+#: ../includes/users.php:181
+msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
 #: ../includes/back-compat.php:32
