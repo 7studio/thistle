@@ -1,18 +1,50 @@
 <?php
-if ( ! function_exists( 'thistle_add_social_image_size' ) ) {
-	/**
-	 * Registers the new image sizes needed by Open Graph and Twitter Card.
-	 */
-	function thistle_add_social_image_size() {
-		if ( ! current_theme_supports( 'thistle-social-meta-tags' ) ) {
-			return;
-		}
 
-		add_image_size( 'thistle-social', 200, 200, true );
-		add_image_size( 'thistle-social-large', 600, 315, true );
-	}
+if ( ! function_exists( '_thistle_get_social_image' ) ) {
+    /**
+     * Retrieves the url, width and height of the nearest image according
+     * to the size selected.
+     *
+     * If there is no direct match, then the raw image will be returned.
+     *
+     * @param int $post_id Attachment ID.
+     * @return array $data {
+     *     Array of file url, width, and height.
+     *
+     *     @type string $url    Image's url
+     *     @type int    $width  Width of image
+     *     @type int    $height Height of image
+     * }
+     */
+    function _thistle_get_social_image( $post_id ) {
+        /**
+         * Filters the image format to define which size to use for sharing.
+         *
+         * @param string|array $size Image size.
+         */
+        $image_size = apply_filters( 'thistle_social_image_size', array( 600, 315 ) );
+
+        $image = image_get_intermediate_size( $post_id, $image_size );
+        $thumbnail_url = wp_get_attachment_url( $post_id );
+
+        if ( is_array( $image ) ) {
+            $wp_upload_dir = wp_upload_dir();
+
+            $image['url'] = str_replace( wp_basename( $thumbnail_url ), $image['file'], $thumbnail_url );
+            $image['path'] = str_replace( $wp_upload_dir['baseurl'], $wp_upload_dir['basedir'], $image['url'] );
+
+            list( $image['width'], $image['height'] ) = getimagesize( $image['path'] );
+        } else {
+            $metadata = wp_get_attachment_metadata( $post_id );
+
+            $image['url'] = $thumbnail_url;
+            $image['width'] = $metadata['width'];
+            $image['height'] = $metadata['height'];
+        }
+
+        return $image;
+    }
 }
-add_action( 'after_setup_theme', 'thistle_add_social_image_size' );
 
 if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 	/**
@@ -36,7 +68,7 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 			'og:url'          => trailingslashit( site_url( $wp->request ) ),
 			'og:title'        => wp_get_document_title(),
 			'og:description'  => thistle_get_description_meta_tag(),
-		 // 'og:image'        => THISTLE_URI . '/assets/images/default-image.png',
+		 // 'og:image'        => THISTLE_CHILD_URI . '/assets/images/default-image.png',
 			'og:image'        => '',
 			'og:image:width'  => '',
 			'og:image:height' => '',
@@ -44,17 +76,10 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 		);
 		$output = '';
 
-		/**
-		 * Filters the image format to define which size to use for sharing.
-		 *
-		 * @param string $format Image format. Default ''.
-		 */
-		$image_size = 'thistle-social-' . apply_filters( 'thistle_social_image_format', '' );
-
 		$meta = apply_filters( 'pre_thistle_get_social_meta_tags', $meta );
 
 		// If on a single post or a single page
-		if ( is_singular( array( 'post', 'page' ) ) ) {
+		if ( ! is_front_page() && is_singular( array( 'post', 'page' ) ) ) {
 			$post = get_post();
 			setup_postdata( $GLOBALS['post'] =& $post );
 
@@ -68,15 +93,19 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 
 				$post_tags = get_the_terms( $post->ID, 'post_tag' );
 				if ( is_array( $post_tags ) ) {
+                    $meta['article:tag'] = array();
+
 					foreach ( $post_tags as $tag ) {
-						$meta['article:tag'] = $tag->name;
+						$meta['article:tag'][] = $tag->name;
 					}
 				}
 
 				$categories = get_the_terms( $post->ID, 'category' );
 				if ( is_array( $categories ) ) {
+                    $meta['article:section'] = array();
+
 					foreach ( $categories as $category ) {
-						$meta['article:section'] = $category->name;
+						$meta['article:section'][] = $category->name;
 					}
 				}
 			}
@@ -86,12 +115,12 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 			$meta['og:url'] = get_the_permalink();
 
 			if ( has_post_thumbnail() ) {
-				$thumbnail_metadata = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thistle-social' );
+                $image = _thistle_get_social_image( get_post_thumbnail_id() );
 
-				if ( is_array( $thumbnail_metadata ) ) {
-					$meta['og:image'] = $thumbnail_metadata[0];
-					$meta['og:image:width'] = $thumbnail_metadata[1];
-					$meta['og:image:height'] = $thumbnail_metadata[2];
+				if ( is_array( $image ) ) {
+					$meta['og:image'] = $image['url'];
+					$meta['og:image:width'] = $image['width'];
+					$meta['og:image:height'] = $image['height'];
 				}
 			}
 
@@ -124,24 +153,23 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 			$meta['og:url'] = get_the_permalink();
 
 			if ( has_post_thumbnail() ) {
-				$thumbnail_metadata = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thistle-social' );
+				$image = _thistle_get_social_image( get_post_thumbnail_id() );
 
-				if ( is_array( $thumbnail_metadata ) ) {
-					$meta['og:image'] = $thumbnail_metadata[0];
-					$meta['og:image:width'] = $thumbnail_metadata[1];
-					$meta['og:image:height'] = $thumbnail_metadata[2];
-				}
+                if ( is_array( $image ) ) {
+                    $meta['og:image'] = $image['url'];
+                    $meta['og:image:width'] = $image['wdth'];
+                    $meta['og:image:height'] = $image['height'];
+                }
 			}
 
 			if ( mb_strpos( $post->post_mime_type, 'image' ) === 0 ) {
-				$metadata = wp_get_attachment_image_src( $post->ID, 'thistle-social' );
+				$image = _thistle_get_social_image( $post->ID );
 
-				if ( is_array( $metadata ) ) {
-					$meta['og:image'] = $metadata[0];
-					$meta['og:image:type'] = $post->post_mime_type;
-					$meta['og:image:width'] = $metadata[1];
-					$meta['og:image:height'] = $metadata[2];
-				}
+                if ( is_array( $image ) ) {
+                    $meta['og:image'] = $image['url'];
+                    $meta['og:image:width'] = $image['wdth'];
+                    $meta['og:image:height'] = $image['height'];
+                }
 			} elseif ( $post->post_mime_type == 'video/mp4' ) {
 				$metadata = wp_get_attachment_metadata( $post->ID );
 
@@ -180,13 +208,54 @@ if ( ! function_exists( '_thistle_render_social_meta_tags' ) ) {
 		$social_meta_tags = thistle_get_social_meta_tags();
 
 		array_walk( $social_meta_tags, function( $value, $key ) use( &$output ) {
-			$output .= '<meta ' . (mb_strpos( $key, 'twitter:' ) !== false ? 'name' : 'property') . '="' . esc_attr( $key ) . '" content="' . esc_attr( $value ) . '">' . "\n";
+            if ( is_array( $value ) ) {
+                foreach ( $value as $v ) {
+                    $output .= '<meta ' . (mb_strpos( $key, 'twitter:' ) !== false ? 'name' : 'property') . '="' . esc_attr( $key ) . '" content="' . esc_attr( $v ) . '">' . "\n";
+                }
+            } else {
+                $output .= '<meta ' . (mb_strpos( $key, 'twitter:' ) !== false ? 'name' : 'property') . '="' . esc_attr( $key ) . '" content="' . esc_attr( $value ) . '">' . "\n";
+            }
 		} );
 
 		echo $output;
 	}
 }
 add_action( 'wp_head', '_thistle_render_social_meta_tags', 10 );
+
+if ( ! function_exists( 'thistle_ogp_namespaces' ) ) {
+    /**
+     * Displays the right and needed Open Graph protocol namespaces
+     * to help Facebook to parse our contents correctly.
+     */
+    function thistle_ogp_namespaces() {
+        $ns = array(
+            'og' => 'og: http://ogp.me/ns#',
+            'fb' => 'fb: http://ogp.me/ns/fb#',
+            'ot' => 'website: http://ogp.me/ns/website#'
+        );
+
+        // If on a single post
+        if ( is_singular( 'post' ) ) {
+            $ns['ot'] = 'article: http://ogp.me/ns/article#';
+
+        // If on an author archive
+        } elseif ( is_author() && $author = get_queried_object() ) {
+            $ns['ot'] = 'profile: http://ogp.me/ns/profile#';
+
+        // If on an attachment
+        } elseif ( is_attachment() ) {
+            $post = get_post();
+
+            if ( $post->post_mime_type == 'video/mp4' ) {
+                $ns['ot'] = 'video: http://ogp.me/ns/video#';
+            }
+        }
+
+        $ns = apply_filters( 'thistle_ogp_namespaces', $ns );
+
+        echo implode( ' ', array_filter( $ns ) );
+    }
+}
 
 if ( ! function_exists( 'thistle_get_facebook_sharelink' ) ) {
 	/**
@@ -263,7 +332,7 @@ if ( ! function_exists( 'thistle_get_twitter_sharelink' ) )  {
 				$hashtags = array();
 
 				foreach ( $post_tags as $tag ) {
-					$hashtags[] = $tag->name;
+					$hashtags[] = str_replace( ' ', '', $tag->name );
 				}
 				array_splice( $hashtags, 3 );
 				$data['hashtags'] = implode( ',', $hashtags );

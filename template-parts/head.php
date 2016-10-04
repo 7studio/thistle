@@ -2,7 +2,7 @@
 <html lang="<?php bloginfo( 'language' ); ?>"
 	  dir="ltr"
 	  class="no-js"
-	  prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#"
+	  prefix="<?php thistle_ogp_namespaces(); ?>"
 >
 	<head>
 		<meta charset="<?php bloginfo( 'charset' ); ?>">
