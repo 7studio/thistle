@@ -390,6 +390,149 @@ if ( ! function_exists( 'thistle_sanitize_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'thistle_enqueue_assets' ) ) {
+    /**
+     * Enqueues assets (if exist) automaticaly trying to follow
+     * (as far as possible) the template hierarchy behaviour
+     * and the WP naming convention.
+     *
+     * By default, Thistle enqueues one CSS file `style.css` and two
+     * JS files `script.js` and `svgxuse.js` except in 404 case.
+     * It will also enqueue needed assets when your content contains
+     * a gallery shortcode ;)
+     *
+     * To determine which assets file to enqueue, Thistle tries to load
+     * two different files on its own:
+     *
+     * 1. Named with the current post type when you are on:
+     *    a single post type, a taxonomy archive or a post type archive.
+     * 2. Named matching the template file used.
+     *
+     * BTW, if the two files exist, Thistle loads all of them.
+     *
+     * By default, Thistle pushes all JS at the end of the document
+     * and sets media HTML attribut to `screen` for CSS.
+     */
+    function thistle_enqueue_assets() {
+        global $template;
+
+        // Redefines defaults WP args for scripts and styles.
+        $style_atts = array( 'deps' => array(), 'ver' => false, 'media' => 'screen' );
+        $script_atts = array( 'deps' => array(), 'ver' => false, 'in_footer' => true );
+
+        $assets = array( 'styles' => array(), 'scripts' => array() );
+        $post_type = '';
+        $template = pathinfo( $template, PATHINFO_FILENAME );
+        $queried_object = get_queried_object();
+
+        $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+        if ( ! is_404() ) {
+            // Registers defaults files.
+            $assets['styles']['style'] = array( 'src' => 'style.css' );
+            $assets['scripts']['svgxuse'] = array();
+            $assets['scripts']['script'] = array(
+                'src'  => 'script.js',
+                'data' => array(
+                    'THISTLE' => array(
+                        'url'      => THISTLE_CHILD_URI,
+                        'ajax_url' => admin_url( 'admin-ajax.php' ),
+                        'debug'    => defined( 'WP_DEBUG' ) ? WP_DEBUG : false
+                    )
+                )
+            );
+
+            // Registers assets for the gallery shortcode.
+            if ( (is_singular() && thistle_has_gallery_shortcode()) || apply_filters( 'thistle_get_gallery_template_part', false ) ) {
+                $assets['styles']['imagegallery'] = array( 'src' => 'imagegallery.css' );
+                $assets['scripts']['imagegallery'] = array();
+            }
+
+            // Tries to find the current post type.
+            if ( is_post_type_archive() ) {
+                $post_type = $queried_object->name;
+            } elseif ( is_category() || is_tag() || is_tax() ) {
+                $post_type = get_taxonomy( $queried_object->taxonomy )->object_type[0];
+            } elseif ( is_single() ) {
+                $post_type = $queried_object->post_type;
+            } elseif ( is_home() || is_archive() ) {
+                $post_type = 'post';
+            }
+
+            // If on a page related to a post type (archive, tax, single, date, etc)
+            if ( $post_type ) {
+                if ( file_exists( THISTLE_CHILD_PATH . '/assets/styles/' . $post_type . $min . '.css' ) ) {
+                    $assets['styles'][ $post_type ] = array( 'src' => $post_type . '.css' );
+                }
+                if ( file_exists( THISTLE_CHILD_PATH . '/assets/scripts/' . $post_type . $min . '.js' ) ) {
+                    $assets['scripts'][ $post_type ] = array( 'src' => $post_type . '.js' );
+                }
+            }
+        }
+
+        // Tries to register assets which have the same name as the matching template file.
+        if ( file_exists( THISTLE_CHILD_PATH . '/assets/styles/' . $template . $min . '.css' ) ) {
+            $assets['styles'][ $template ] = array( 'src' => $template . '.css' );
+        }
+        if ( file_exists( THISTLE_CHILD_PATH . '/assets/scripts/' . $template . $min . '.js' ) ) {
+            $assets['scripts'][ $template ] = array( 'src' => $template . '.js' );
+        }
+
+        if ( WP_DEBUG && file_exists( THISTLE_CHILD_PATH . '/assets/styles/debug.css' ) ) {
+            $assets['styles']['debug'] = array( 'src' => 'debug.css' );
+        }
+
+        /**
+         * Filters the array of enqueued styles and scripts before processing
+         * for output.
+         *
+         * @param array  $assets    The list of enqueued assets about to be processed.
+         * @param string $template  The template used for the current content.
+         * @param string $post_type
+          */
+        $assets = apply_filters( 'thistle_enqueue_assets', $assets, $template, $post_type );
+
+        $assets['styles'] = array_map( function( $s ) use( $style_atts ) { return wp_parse_args( $s, $style_atts ); }, $assets['styles'] );
+        $assets['scripts'] = array_map( function( $s ) use( $script_atts ) { return wp_parse_args( $s, $script_atts ); }, $assets['scripts'] );
+
+        foreach ( $assets['styles'] as $handle => $style ) {
+            $handle = $handle[0] == '!' ? $handle : 'thistle-' . $handle;
+
+            if ( isset( $style['src'] ) && mb_strpos( $style['src'], 'http' ) === false ) {
+                $style['src'] = THISTLE_CHILD_URI . '/assets/styles/' . $style['src'];
+                $style['src'] = str_replace( '.css', $min . '.css', $style['src'] );
+            }
+
+            wp_enqueue_style( $handle, $style['src'], $style['deps'], $style['ver'], $style['media'] );
+        }
+
+        foreach ( $assets['scripts'] as $handle => $script ) {
+            $handle = $handle[0] == '!' ? $handle : 'thistle-' . $handle;
+
+            if ( isset( $script['src'] ) && mb_strpos( $script['src'], 'http' ) === false ) {
+                $script['src'] = THISTLE_CHILD_URI . '/assets/scripts/' . $script['src'];
+                $script['src'] = str_replace( '.js', $min . '.js', $script['src'] );
+            }
+
+            if ( ! isset( $script['src'] ) ) {
+                wp_enqueue_script( $handle );
+            } else {
+                wp_enqueue_script( $handle, $script['src'], $script['deps'], $script['ver'], $script['in_footer'] );
+            }
+
+
+            if  ( isset( $script['data'] ) ) {
+                foreach ( $script['data'] as $object_name => $data ) {
+                    wp_localize_script( $handle, $object_name, $data );
+                }
+            }
+        }
+    }
+}
+add_action( 'wp_enqueue_scripts', 'thistle_enqueue_assets' );
+
+
+
 require_once THISTLE_PATH . '/includes/attachment.php';
 require_once THISTLE_PATH . '/includes/author.php';
 require_once THISTLE_PATH . '/includes/category.php';
