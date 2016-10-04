@@ -390,16 +390,16 @@ if ( ! function_exists( 'thistle_sanitize_option' ) ) {
 	}
 }
 
-require_once 'includes/attachment.php';
-require_once 'includes/author.php';
-require_once 'includes/category.php';
-require_once 'includes/editor.php';
-require_once 'includes/embed.php';
-require_once 'includes/excerpt.php';
-require_once 'includes/gallery-shortcode.php';
-require_once 'includes/search.php';
-require_once 'includes/seo.php';
-require_once 'includes/share.php';
-require_once 'includes/thumbnail.php';
-require_once 'includes/users.php';
-require_once 'includes/admin.php';
+require_once THISTLE_PATH . '/includes/attachment.php';
+require_once THISTLE_PATH . '/includes/author.php';
+require_once THISTLE_PATH . '/includes/category.php';
+require_once THISTLE_PATH . '/includes/editor.php';
+require_once THISTLE_PATH . '/includes/embed.php';
+require_once THISTLE_PATH . '/includes/excerpt.php';
+require_once THISTLE_PATH . '/includes/gallery-shortcode.php';
+require_once THISTLE_PATH . '/includes/search.php';
+require_once THISTLE_PATH . '/includes/seo.php';
+require_once THISTLE_PATH . '/includes/share.php';
+require_once THISTLE_PATH . '/includes/thumbnail.php';
+require_once THISTLE_PATH . '/includes/users.php';
+require_once THISTLE_PATH . '/includes/admin.php';
