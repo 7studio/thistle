@@ -334,3 +334,27 @@ if ( ! function_exists( 'thistle_document_title_parts' ) ) {
 	}
 }
 add_filter( 'document_title_parts', 'thistle_document_title_parts' );
+
+if ( ! function_exists( 'thistle_add_ga_tracking' ) ) {
+    /**
+     * Displays the Google Analytics tracking code except when:
+     *
+     * 1. The "debug" mode is activated;
+     * 2. The current visitor is a logged user;
+     * 3. The search engines are not allowed to index the site;
+     * 4. No tracking code is defined.
+     */
+    function thistle_add_ga_tracking() {
+        if ( WP_DEBUG || current_user_can( 'read' ) || ! get_option( 'blog_public' ) || ! defined( 'THISTLE_GA_TRACKING_ID' ) || THISTLE_GA_TRACKING_ID == '' ) {
+            return;
+        }
+        ?>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', '<?php echo THISTLE_GA_TRACKING_ID; ?>', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <?php
+    }
+}
+add_action( 'wp_head', 'thistle_add_ga_tracking', 9999 );
