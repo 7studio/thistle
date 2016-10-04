@@ -484,3 +484,67 @@ if ( ! function_exists( 'thistle_dequeue_wpembed_script' ) ) {
      }
  }
 add_action( 'init', 'thistle_dequeue_wpembed_script' );
+
+if ( ! function_exists( 'thistle_add_oembed_tmp_post_meta' ) ) {
+    /**
+     * Stores temporarily the data object result from the oEmbed provider
+     * into a custom field. This meta will be used only to construct the
+     * definitive custom field in another hook `oembed_result`.
+     *
+     * @param string $return The returned oEmbed HTML.
+     * @param object $data   A data object result from an oEmbed provider.
+     * @param string $url    The URL of the content to be embedded.
+     * @return false|string
+     */
+    function thistle_add_oembed_tmp_post_meta( $return, $data, $url ) {
+        $post = get_post();
+
+        if ( ! $post ) {
+            return $return;
+        }
+
+        if ( $post && $return ) {
+            update_post_meta( $post->ID, '_oembed_tmp_' . md5( $url ), $data );
+        }
+
+        return $return;
+    }
+}
+add_filter( 'oembed_dataparse', 'thistle_add_oembed_tmp_post_meta', 11, 3 );
+
+if ( ! function_exists( 'thistle_add_oembed_data_post_meta' ) ) {
+    /**
+     * Stores/Caches the data object result from the oEmbed provider
+     * into a custom field like `_oembed_` and `_oembed_time_`. This meta
+     * could be used to display provider thumbnail, description and many
+     * other things without any additional request.
+     *
+     * This meta will be deleted and updated at the same time
+     * that the other meta about the embed.
+     *
+     * @param string $data The returned oEmbed HTML.
+     * @param string $url  URL of the content to be embedded.
+     * @param array  $args Optional arguments, usually passed from a shortcode.
+     * @return false|string
+     */
+    function thistle_add_oembed_data_post_meta( $data, $url, $args ) {
+        $post = get_post();
+
+        if ( ! $post ) {
+            return $data;
+        }
+
+        $_oembed_tmp_data = get_post_meta( $post->ID, '_oembed_tmp_' . md5( $url ), true );
+        if ( ! empty( $_oembed_tmp_data ) ) {
+            unset( $args['discover'] );
+            $key_suffix = md5( $url . serialize( $args ) );
+
+            update_post_meta( $post->ID, '_oembed_data_' . $key_suffix, $_oembed_tmp_data );
+            delete_post_meta( $post->ID, '_oembed_tmp_' . md5( $url ) );
+        }
+
+        return $data;
+    }
+}
+
+add_filter( 'oembed_result', 'thistle_add_oembed_data_post_meta', 10, 3 );
