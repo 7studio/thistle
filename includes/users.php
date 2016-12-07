@@ -249,22 +249,26 @@ if ( ! function_exists( 'thistle_remove_staticfrontpage_customize_section' ) ) {
 }
 add_action( 'customize_register', 'thistle_remove_staticfrontpage_customize_section', 11 );
 
-if ( ! function_exists( 'thistle_remove_slugdiv_meta_boxes' ) ) {
+if ( ! function_exists( 'thistle_hide_slugdiv_meta_boxes' ) ) {
     /**
-     * Removes the "Slug" meta box for all post types
+     * Hides the "Slug" meta box for all post types
      * when you are not an andministrator.
      *
      * It is more understandable to modify the slug into the permalink
      * below the title.
      */
-    function thistle_remove_slugdiv_meta_boxes() {
+    function thistle_hide_slugdiv_meta_boxes() {
         if( ! current_user_can( 'administrator' ) ) {
-            $post_types = get_post_types( array( 'public' => true ), 'names' );
-
-            foreach ( $post_types as $post_type ) {
-                remove_meta_box( 'slugdiv', $post_type, 'normal' );
-            }
+            ?>
+            <style>
+                #slugdiv,
+                #screen-meta [for=slugdiv-hide] {
+                    display: none;
+                }
+            </style>
+            <?php
         }
     }
 }
-add_action( 'admin_menu', 'thistle_remove_slugdiv_meta_boxes' );
+add_action( 'admin_head-post.php', 'thistle_hide_slugdiv_meta_boxes' );
+add_action( 'admin_head-post-new.php', 'thistle_hide_slugdiv_meta_boxes' );
