@@ -483,10 +483,10 @@ if ( ! function_exists( 'thistle_get_pinterest_sharelink' ) )  {
 
 			if ( has_post_thumbnail() ) {
                 $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-				$metadata = wp_get_attachment_image_src( $post_thumbnail_id, 'opengraph' );
+                $image = _thistle_get_social_image( $post_thumbnail_id );
 
-				if ( is_array( $metadata ) ) {
-					$data['media'] = $metadata[0];
+                if ( is_array( $image ) ) {
+					$data['media'] = $image['url'];
 					$data['description'] = get_the_excerpt( $post_thumbnail_id );
 				}
 			}
