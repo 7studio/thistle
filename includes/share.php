@@ -109,12 +109,12 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 				}
 			}
 
-			$meta['og:title'] = get_the_title();
+			$meta['og:title'] = get_the_title( $post->ID );
 			$meta['og:description'] = get_the_excerpt( $post->ID );
-			$meta['og:url'] = get_the_permalink();
+			$meta['og:url'] = get_the_permalink( $post->ID );
 
 			if ( has_post_thumbnail() ) {
-                $image = _thistle_get_social_image( get_post_thumbnail_id() );
+                $image = _thistle_get_social_image( get_post_thumbnail_id( $post->ID ) );
 
 				if ( is_array( $image ) ) {
 					$meta['og:image'] = $image['url'];
@@ -143,12 +143,12 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 		} elseif ( is_attachment() ) {
 			$post = get_post();
 
-			$meta['og:title'] = get_the_title();
-			$meta['og:description'] = get_the_content();
-			$meta['og:url'] = get_the_permalink();
+			$meta['og:title'] = get_the_title( $post->ID );
+			$meta['og:description'] = get_the_excerpt( $post->ID );
+			$meta['og:url'] = get_the_permalink( $post->ID );
 
 			if ( has_post_thumbnail() ) {
-				$image = _thistle_get_social_image( get_post_thumbnail_id() );
+				$image = _thistle_get_social_image( get_post_thumbnail_id( $post->ID ) );
 
                 if ( is_array( $image ) ) {
                     $meta['og:image'] = $image['url'];
@@ -265,7 +265,7 @@ if ( ! function_exists( 'thistle_get_facebook_sharelink' ) ) {
 		if ( ! empty( $post->ID ) ) {
 			$sharelink = 'https://www.facebook.com/sharer/sharer.php?';
 			$data = array(
-				 'u' => get_the_permalink()
+				 'u' => get_the_permalink( $post->ID )
 			);
 
 			$data = apply_filters( 'pre_thistle_facebook_sharelink', $data );
@@ -313,8 +313,8 @@ if ( ! function_exists( 'thistle_get_twitter_sharelink' ) )  {
 			$post_tags = get_the_terms( $post->ID, 'post_tag' );
 			$sharelink = 'https://twitter.com/intent/tweet?';
 			$data = array(
-				'url'         => get_the_permalink(),
-				'text'        => get_the_title(),
+				'url'         => get_the_permalink( $post->ID ),
+				'text'        => get_the_title( $post->ID ),
 				'hastag'      => '',
 				'via'         => '',
 				'related'     => '',
@@ -377,7 +377,7 @@ if ( ! function_exists( 'thistle_get_googleplus_sharelink' ) ) {
 		if ( ! empty( $post->ID ) ) {
 			$sharelink = 'https://plus.google.com/share?';
 			$data = array(
-				 'url' => get_the_permalink(),
+				 'url' => get_the_permalink( $post->ID ),
 				 'hl'  => 'fr'
 			);
 
@@ -425,9 +425,9 @@ if ( ! function_exists( 'thistle_get_linkedin_sharelink' ) ) {
 		if ( ! empty( $post->ID ) ) {
 			$sharelink = 'https://www.linkedin.com/shareArticle?';
 			$data = array(
-				'url'     => get_the_permalink(),
+				'url'     => get_the_permalink( $post->ID ),
 				'mini'    => 'true',
-				'title'   => get_the_title(),
+				'title'   => get_the_title( $post->ID ),
 				'summary' => get_the_excerpt( $post->ID ),
 				'source'  => get_bloginfo( 'description', 'display' )
 			);
@@ -476,13 +476,13 @@ if ( ! function_exists( 'thistle_get_pinterest_sharelink' ) )  {
 		if ( ! empty( $post->ID ) ) {
 			$sharelink = 'https://www.pinterest.com/pin/create/button/?';
 			$data = array(
-				'url'         => get_the_permalink(),
+				'url'         => get_the_permalink( $post->ID ),
 				'media'       => '',
 				'description' => ''
 			);
 
 			if ( has_post_thumbnail() ) {
-				$post_thumbnail_id = get_post_thumbnail_id();
+                $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
 				$metadata = wp_get_attachment_image_src( $post_thumbnail_id, 'opengraph' );
 
 				if ( is_array( $metadata ) ) {
