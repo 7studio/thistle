@@ -117,10 +117,6 @@ if ( ! function_exists( 'thistle_setup_theme' ) ) {
 		//
 		add_filter( 'xmlrpc_enabled', '__return_false' );
 
-		// Disables the WP-API version 2.x
-		add_filter('rest_enabled', '__return_false');
-		add_filter('rest_jsonp_enabled', '__return_false');
-
 		// Switches default core markup for gallery and caption to output valid HTML5.
 		add_theme_support( 'html5', array(
 			'gallery',
@@ -238,9 +234,6 @@ if ( ! function_exists( 'thistle_clean_head' ) ) {
 
 		// Hides the REST API link tag into page header.
 		remove_action( 'wp_head', 'rest_output_link_wp_head' );
-
-		// Hides the oEmbed discovery links.
-		remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 	}
 }
 add_action( 'init', 'thistle_clean_head' );
