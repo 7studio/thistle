@@ -149,12 +149,9 @@ if ( ! function_exists( 'thistle_get_description_meta_tag' ) ) {
 		} elseif ( is_home() || is_singular( array( 'post', 'page' ) ) ) {
 			$post = get_queried_object();
 
-			// Allows us to use `get_the_excerpt()` and more outside a loop
-			setup_postdata( $GLOBALS['post'] =& $post );
-
-			$description = get_the_excerpt();
-
-			wp_reset_postdata();
+            if ( ! empty( $post->ID ) ) {
+                $description = get_the_excerpt( $post->ID );
+            }
 
 		// If on a category or tag archive
 		} elseif ( is_category() || is_tag() ) {

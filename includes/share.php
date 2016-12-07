@@ -81,7 +81,6 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 		// If on a single post or a single page
 		if ( ! is_front_page() && is_singular( array( 'post', 'page' ) ) ) {
 			$post = get_post();
-			setup_postdata( $GLOBALS['post'] =& $post );
 
 			if ( is_singular( 'post' ) ) {
 				$meta['og:type'] = 'article';
@@ -111,7 +110,7 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 			}
 
 			$meta['og:title'] = get_the_title();
-			$meta['og:description'] = get_the_excerpt();
+			$meta['og:description'] = get_the_excerpt( $post->ID );
 			$meta['og:url'] = get_the_permalink();
 
 			if ( has_post_thumbnail() ) {
@@ -123,8 +122,6 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 					$meta['og:image:height'] = $image['height'];
 				}
 			}
-
-			wp_reset_postdata();
 
 		// If on an author archive
 		} elseif ( is_author() && $author = get_queried_object() ) {
@@ -145,8 +142,6 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 		// If on an attachment
 		} elseif ( is_attachment() ) {
 			$post = get_post();
-			// Allows us to use `get_the_excerpt()` and more outside a loop
-			setup_postdata( $GLOBALS['post'] =& $post );
 
 			$meta['og:title'] = get_the_title();
 			$meta['og:description'] = get_the_content();
@@ -178,8 +173,6 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 				$meta['og:video:width'] = $metadata['width'];
 				$meta['og:video:height'] = $metadata['height'];
 			}
-
-			wp_reset_postdata();
 		}
 
 		$meta = apply_filters( 'thistle_get_social_meta_tags', $meta );
@@ -430,18 +423,14 @@ if ( ! function_exists( 'thistle_get_linkedin_sharelink' ) ) {
 		$post = get_post( $id );
 
 		if ( ! empty( $post->ID ) ) {
-			setup_postdata( $post );
-
 			$sharelink = 'https://www.linkedin.com/shareArticle?';
 			$data = array(
 				'url'     => get_the_permalink(),
 				'mini'    => 'true',
 				'title'   => get_the_title(),
-				'summary' => get_the_excerpt(),
+				'summary' => get_the_excerpt( $post->ID ),
 				'source'  => get_bloginfo( 'description', 'display' )
 			);
-
-			wp_reset_postdata();
 
 			$data = apply_filters( 'pre_thistle_linkedin_sharelink', $data );
 			$data = array_filter( $data );
@@ -497,13 +486,8 @@ if ( ! function_exists( 'thistle_get_pinterest_sharelink' ) )  {
 				$metadata = wp_get_attachment_image_src( $post_thumbnail_id, 'opengraph' );
 
 				if ( is_array( $metadata ) ) {
-					$post_thumbnail = get_post( $post_thumbnail_id );
-					setup_postdata( $post_thumbnail );
-
 					$data['media'] = $metadata[0];
-					$data['description'] = get_the_excerpt();
-
-					wp_reset_postdata();
+					$data['description'] = get_the_excerpt( $post_thumbnail_id );
 				}
 			}
 
