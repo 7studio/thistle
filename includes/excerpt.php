@@ -169,7 +169,7 @@ if ( ! function_exists( 'thistle_run_after_title_meta_boxes' ) ) {
 		}
 	}
 }
-add_action( 'edit_form_after_title', 'thistle_run_after_title_meta_boxes' );
+add_action( 'edit_form_after_title', 'thistle_run_after_title_meta_boxes', PHP_INT_MAX );
 
 if ( ! function_exists( 'thistle_postexcerpt_meta_box_assets' ) ) {
 	/**
