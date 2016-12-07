@@ -479,10 +479,10 @@ if ( ! function_exists( 'thistle_dequeue_wpembed_script' ) ) {
      * This JavaScript is automaticaly added by WordPress all the time
      * to work with other WordPress inline HTML embeds.
      */
-     function thistle_dequeue_wpembed_script() {
-         remove_action( 'wp_head', 'wp_oembed_add_host_js' );
-     }
- }
+    function thistle_dequeue_wpembed_script() {
+        remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+    }
+}
 add_action( 'init', 'thistle_dequeue_wpembed_script' );
 
 if ( ! function_exists( 'thistle_add_oembed_tmp_post_meta' ) ) {

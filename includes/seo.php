@@ -166,12 +166,7 @@ if ( ! function_exists( 'thistle_get_description_meta_tag' ) ) {
 
 		// If on an attachment
 		} elseif ( is_attachment() ) {
-			$post = get_post();
-			setup_postdata( $GLOBALS['post'] =& $post );
-
 			$description = get_the_content();
-
-			wp_reset_postdata();
 		}
 
 		$description = apply_filters( 'thistle_get_description_meta_tag', $description );

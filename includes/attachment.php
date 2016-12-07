@@ -34,7 +34,7 @@ if ( ! function_exists( 'thistle_attachment_link' ) ) {
 		return $link;
 	}
 }
-add_filter( 'attachment_link', 'thistle_attachment_link', 2, 10 );
+add_filter( 'attachment_link', 'thistle_attachment_link', 10, 2 );
 
 if ( ! function_exists( 'thistle_attachment_rewrite' ) ) {
 	/**
@@ -59,9 +59,9 @@ if ( ! function_exists( 'thistle_attachment_rewrite' ) ) {
 
 		$attachment_tag = '%ATTACHMENT_TAG%';
 		$attachment_rules = array();
-		$attachment_rules[ 'media/' . $attachment_tag . '/trackback/?$' ] = 'index.php?%ATTACHMENT_TAG%' . $wp_rewrite->preg_index(1) . '&tb=1';
-		$attachment_rules[ 'media/' . $attachment_tag . '/embed/?$' ] = 'index.php?%ATTACHMENT_TAG%' . $wp_rewrite->preg_index(1) . '&embed=true';
-		$attachment_rules += $wp_rewrite->generate_rewrite_rules( 'media/'.$attachment_tag, EP_PAGES, false, true, false, false );
+		$attachment_rules[ 'media/' . $attachment_tag . '/trackback/?$' ] = 'index.php?' . $attachment_tag . $wp_rewrite->preg_index(1) . '&tb=1';
+		$attachment_rules[ 'media/' . $attachment_tag . '/embed/?$' ] = 'index.php?' . $attachment_tag . $wp_rewrite->preg_index(1) . '&embed=true';
+		$attachment_rules += $wp_rewrite->generate_rewrite_rules( 'media/' . $attachment_tag, EP_PAGES, false, true, false, false );
 
 		foreach ( $attachment_rules as $key => $value ) {
 			$attachment_rules[ str_replace( $attachment_tag, $rewritereplace, $key ) ] = str_replace( $attachment_tag, 'attachment=', $value );
@@ -72,4 +72,4 @@ if ( ! function_exists( 'thistle_attachment_rewrite' ) ) {
 		return $attachment_rules + $rules;
 	}
 }
-add_filter( 'rewrite_rules_array', 'thistle_attachment_rewrite', 1, 999 );
+add_filter( 'rewrite_rules_array', 'thistle_attachment_rewrite', PHP_INT_MAX, 1 );

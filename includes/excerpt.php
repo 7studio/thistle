@@ -128,7 +128,7 @@ if ( ! function_exists( 'thistle_remove_postexcerpt_meta_box' ) ) {
 		}
 	}
 }
-add_action( 'admin_menu' , 'thistle_remove_postexcerpt_meta_box' );
+add_action( 'admin_menu', 'thistle_remove_postexcerpt_meta_box' );
 
 if ( ! function_exists( 'thistle_add_postexcerpt_meta_box' ) ) {
 	/**

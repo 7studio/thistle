@@ -227,7 +227,7 @@ if ( ! function_exists( 'thistle_redirect_options_page' ) ) {
             );
 
             if ( in_array( $pagenow, $pages ) ) {
-                wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+                wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
             }
         }
     }
