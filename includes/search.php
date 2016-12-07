@@ -42,26 +42,25 @@ if ( ! is_admin() ) {
 
 	if ( ! function_exists( 'thistle_search_rewrite_rules' ) ) {
 		/**
-		 * Changes some rewrite rules used for search archives.
+		 * Changes all rewrite rules used for search archives.
 		 *
 		 * @global WP_Rewrite $wp_rewrite
 		 *
-		 * @param array $search_rewrite The rewrite rules for search queries.
+		 * @param array $rules The compiled array of rewrite rules.
 		 * @return array An associate array of matches and queries.
 		 */
-		function thistle_search_rewrite_rules( $search_rewrite ) {
+		function thistle_search_rewrite_rules( $rules ) {
 			global $wp_rewrite;
 
-			unset( $search_rewrite[ $wp_rewrite->search_base . '/(.+)/?$' ] );
+	        $search_rules = $wp_rewrite->generate_rewrite_rules( 'recherche', EP_SEARCH, true, true, false, false );
+	        $search_rules = array_map( function( $r ) { return $r . '&s='; }, $search_rules );
+	        $search_rules[ $wp_rewrite->search_base . '/?$' ] = 'index.php?s=';
 
-			$new_rules = array(
-				$wp_rewrite->search_base . '/?$' => 'index.php?s='
-			);
-
-			return ($new_rules + $search_rewrite);
+			return array_merge($search_rules, $rules);
 		}
 	}
-	add_filter( 'search_rewrite_rules', 'thistle_search_rewrite_rules' );
+	add_filter( 'search_rewrite_rules', '__return_empty_array' );
+	add_filter( 'rewrite_rules_array', 'thistle_search_rewrite_rules' );
 
 	if ( ! function_exists( 'thistle_search_query_vars' ) ) {
 		/**
