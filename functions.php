@@ -197,24 +197,6 @@ if ( ! function_exists( 'thistle_remove_generator' ) ) {
 }
 add_action( 'init', 'thistle_remove_generator' );
 
-if ( ! function_exists( 'thistle_remove_ver' ) ) {
-	/**
-	 * Removes WordPress version from assets URLs.
-	 *
-	 * @param string $src The source URL of the enqueued asset.
-	 * @return string
-	 */
-	function thistle_remove_ver( $src ) {
-	    if ( mb_strpos( $src, 'ver=' . get_bloginfo( 'version' ) ) !== false ) {
-	        $src = remove_query_arg( 'ver', $src );
-	    }
-
-	    return $src;
-	}
-}
-add_filter( 'style_loader_src', 'thistle_remove_ver' );
-add_filter( 'script_loader_src', 'thistle_remove_ver' );
-
 if ( ! function_exists( 'thistle_javascript_detection' ) ) {
 	/**
 	 * Handles JavaScript detection.
@@ -325,7 +307,7 @@ if ( ! function_exists( 'thistle_register_svgxuse' ) ) {
     function thistle_register_svgxuse() {
         $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-        wp_register_script( 'thistle-svgxuse', get_stylesheet_directory_uri() . '/assets/scripts/vendor/svgxuse/svgxuse' . $min . '.js', array(), false, true );
+        wp_register_script( 'thistle-svgxuse', get_stylesheet_directory_uri() . '/assets/scripts/vendor/svgxuse/svgxuse' . $min . '.js', array(), null, true );
     }
 }
 add_action( 'init', 'thistle_register_svgxuse' );
@@ -424,8 +406,8 @@ if ( ! function_exists( 'thistle_enqueue_assets' ) ) {
         global $template;
 
         // Redefines defaults WP args for scripts and styles.
-        $style_atts = array( 'deps' => array(), 'ver' => false, 'media' => 'screen' );
-        $script_atts = array( 'deps' => array(), 'ver' => false, 'in_footer' => true );
+        $style_atts = array( 'deps' => array(), 'ver' => null, 'media' => 'screen' );
+        $script_atts = array( 'deps' => array(), 'ver' => null, 'in_footer' => true );
 
         $assets = array( 'styles' => array(), 'scripts' => array() );
         $post_type = '';
