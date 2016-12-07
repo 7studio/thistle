@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Exits if accessed directly.
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 define( 'THISTLE_TEXT_DOMAIN', 'thistle' );
 define( 'THISTLE_URI',  get_template_directory_uri() );
 define( 'THISTLE_PATH', get_template_directory() );
