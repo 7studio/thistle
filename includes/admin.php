@@ -79,4 +79,81 @@ if ( ! function_exists( 'thistle_dashboard_glance_items_style' ) ) {
 }
 add_action( 'admin_head-index.php', 'thistle_dashboard_glance_items_style' );
 
+if ( ! function_exists( 'thistle_admin_bar_edit_archive_page' ) ) {
+    /**
+     * Provides a link into the admin bar to edit the page which could share
+     * the same slug as a post type archive when you browse your website.
+     *
+     * By default, WP does it for the posts page when it isn't the front page.
+     *
+     * @global WP_Query $wp_the_query
+     *
+     * @param WP_Admin_Bar $wp_admin_bar (passed by reference).
+     */
+    function thistle_admin_bar_edit_archive_page( $wp_admin_bar ) {
+        global $wp_the_query;
+
+        if ( ! is_admin() ) {
+            $current_object = $wp_the_query->get_queried_object();
+
+            if ( empty( $current_object ) )
+                return;
+
+            if ( is_a( $current_object, 'WP_Post_Type' )
+                && ( $post_type_archive_link = get_post_type_archive_link( $current_object->name ) )
+                && ( $page_object = get_page_by_path( parse_url( $post_type_archive_link, PHP_URL_PATH ) ) )
+                && ( $page_type_object = get_post_type_object( $page_object->post_type ) )
+                && current_user_can( 'edit_post', $page_object->ID )
+                && $page_type_object->show_in_admin_bar
+                && ( $edit_post_link = get_edit_post_link( $page_object->ID ) ) )
+            {
+                $wp_admin_bar->add_menu( array(
+                    'id'    => 'edit',
+                    'title' => $page_type_object->labels->edit_item,
+                    'href'  => $edit_post_link
+                ) );
+            }
+        }
+    }
+}
+add_action( 'admin_bar_menu', 'thistle_admin_bar_edit_archive_page', 80 );
+
+if ( ! function_exists( 'thistle_admin_bar_view_archive_page' ) ) {
+    /**
+     * Provides a link into the admin bar to go to the archive page when
+     * you are on a custom post type listing in the WP administration.
+     * This idea comes from the "SF Archiver" plugin but it uses the default WP UI.
+     *
+     * The conditions to display the link voluntarily omit the "public"
+     * property from the post type object to offer the possibility to go
+     * to an archive page of a post type which hasn't single view.
+     *
+     * @global WP_Query $wp_the_query
+     * @global WP_Rewrite $wp_rewrite
+     *
+     * @param WP_Admin_Bar $wp_admin_bar (passed by reference).
+     */
+    function thistle_admin_bar_view_archive_page( $wp_admin_bar ) {
+        global $wp_the_query, $wp_rewrite;
+
+        if ( is_admin() ) {
+            $current_screen = get_current_screen();
+
+            if ( $current_screen->base == 'edit'
+                && ! empty( $current_screen->post_type )
+                && ( $post_type_object = get_post_type_object( $current_screen->post_type ) )
+                && $post_type_object->show_in_admin_bar
+                && $post_type_object->labels->view_items
+                && ( $post_type_archive_link = get_post_type_archive_link( $post_type_object->name ) ) )
+            {
+                $wp_admin_bar->add_menu( array(
+                    'id'    => 'view',
+                    'title' => $post_type_object->labels->view_items,
+                    'href'  => $post_type_archive_link
+                ) );
+            }
+        }
+    }
+}
+add_action( 'admin_bar_menu', 'thistle_admin_bar_view_archive_page', 80 );
 
