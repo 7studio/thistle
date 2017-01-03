@@ -238,6 +238,20 @@ if ( ! function_exists( 'thistle_clean_head' ) ) {
 }
 add_action( 'init', 'thistle_clean_head' );
 
+if ( ! function_exists( 'thistle_clean_http_headers' ) ) {
+    /**
+     * Cleans HTTP headers.
+     */
+    function thistle_clean_http_headers() {
+        // Removes the Link for the REST API.
+        remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
+
+        // Removes rel=shortlink Link.
+        remove_action( 'template_redirect', 'wp_shortlink_header', 11, 0 );
+    }
+}
+add_action( 'init', 'thistle_clean_http_headers' );
+
 if ( ! function_exists( 'thistle_disable_emoji' ) ) {
 	/**
 	 * Disables the emoji's feature which is enabled by default since WordPress 4.2.
