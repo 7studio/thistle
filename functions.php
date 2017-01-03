@@ -272,6 +272,18 @@ if ( ! function_exists( 'thistle_disable_emoji' ) ) {
 }
 add_action( 'init', 'thistle_disable_emoji' );
 
+if ( ! function_exists( 'thistle_disable_smilies' ) ) {
+    /**
+     * Disables the convertion of smiley code to the icon graphic file equivalent.
+     *
+     * @link https://codex.wordpress.org/Using_Smilies
+     */
+    function thistle_disable_smilies() {
+        add_filter( 'pre_option_use_smilies', '__return_null' );
+    }
+}
+add_action( 'init', 'thistle_disable_smilies' );
+
 if ( ! function_exists( 'thistle_disable_opensans' ) ) {
 	/**
 	 * Removes "Open Sans" webfont loaded via Google Fonts from WP core.
