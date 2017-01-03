@@ -157,3 +157,29 @@ if ( ! function_exists( 'thistle_admin_bar_view_archive_page' ) ) {
 }
 add_action( 'admin_bar_menu', 'thistle_admin_bar_view_archive_page', 80 );
 
+if ( ! function_exists( 'thistle_hide_default_post_format_option' ) ) {
+    /**
+     * Hides the "Default Post Format" option in the "Writing Settings" page
+     * if the current theme doesn't support the feature.
+     */
+    function thistle_hide_default_post_format_option() {
+        if ( ! current_theme_supports( 'post-formats' ) ) {
+        ?>
+        <script>
+            ( function( window, $, undefined ) {
+                if ( typeof $ !== 'undefined' ) {
+                    $( document ).ready( function () {
+                        var option = $( '#default_post_format' );
+
+                        option
+                            .parents('tr')
+                                .addClass( 'hidden' );
+                    } );
+                }
+            } )( window, window.jQuery );
+        </script>
+        <?php
+        }
+    }
+}
+add_action( 'admin_head-options-writing.php', 'thistle_hide_default_post_format_option' );
