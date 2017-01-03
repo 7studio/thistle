@@ -356,6 +356,21 @@ add_action( 'script_loader_tag', 'thistle_add_svgxuse_defer_attribute', 10, 3 );
  */
 add_filter( 'enable_post_by_email_configuration', '__return_false' );
 
+if ( ! function_exists( 'thistle_remove_wptexturize_filter' ) ) {
+    /**
+     * Short-circuits the wptexturize function if site language is French.
+     *
+     * The wptexturize behaviour doesn't care about French typography rules
+     * and it's a waste of time during the execution.
+     *
+     * If you love typography, you should favour a project like JolyTypo.
+     */
+    function thistle_remove_wptexturize_filter() {
+        add_filter( 'run_wptexturize', '__return_false' );
+    }
+}
+add_action( 'init', 'thistle_remove_wptexturize_filter' );
+
 if ( ! function_exists( 'thistle_sanitize_option' ) ) {
 	/**
 	 * Sanitises various option values based on the nature of the option.
