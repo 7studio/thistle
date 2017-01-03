@@ -68,7 +68,9 @@ if ( ! function_exists( 'thistle_get_embed' ) ) {
 		}
 
 		if ( $ratio ) {
-			$gcd = gmp_intval( gmp_gcd( $width, $height ) );
+            $thistle_gcd = function( $a, $b ) use ( &$thistle_gcd ) { return ( $a % $b ) ? $thistle_gcd( $b, $a % $b ) : $b; };
+
+			$gcd = function_exists( 'gmp_gcd' ) ? gmp_intval( gmp_gcd( $width, $height ) ) : $thistle_gcd( $width, $height );
 			$aspect_ratio = ($width / $gcd) . ":" . ($height / $gcd);
 
 			$output  = '<div class="Embed" embed-aspectRatio="' . $aspect_ratio . '" style="max-width:' . $max_width . '">';
