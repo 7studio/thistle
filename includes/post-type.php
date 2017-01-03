@@ -61,3 +61,41 @@ if ( ! function_exists( 'thistle_exclude_from_search' ) ) {
     }
 }
 add_action( 'posts_selection', 'thistle_exclude_from_search', PHP_INT_MAX );
+
+if ( ! function_exists( 'thistle_post_type_achive' ) ) {
+    /**
+     * Removes the limit to query only post_types that are `publicly_queryable`.
+     *
+     * This behaviour is really helpful when you want the post type archive page
+     * and don't want the single page. To work as expected, you need to set
+     * the `has_archive` parameter to true and define the permalink structure slug.
+     *
+     * @param WP $wp Current WordPress environment instance (passed by reference).
+     */
+    function thistle_post_type_achive( $wp ) {
+        if ( mb_strpos( $wp->matched_query, 'post_type=' ) === 0 ) {
+            parse_str( $wp->matched_query );
+
+            if ( isset( $post_type ) && post_type_exists( $post_type ) ) {
+                $post_type_object = get_post_type_object( $post_type );
+
+                if ( ! $post_type_object->publicly_queryable
+                    && $post_type_object->has_archive
+                    && isset( $post_type_object->rewrite['slug'] )
+                    && $wp->matched_rule == $post_type_object->rewrite['slug'] . '/?$' )
+                {
+                    if ( isset( $wp->query_vars['post_type'] ) ) {
+                        if ( is_array( $wp->query_vars['post_type'] ) ) {
+                            $wp->query_vars['post_type'][] = $post_type;
+                        } else {
+                            $wp->query_vars['post_type'] = array( $wp->query_vars['post_type'], $post_type );
+                        }
+                    } else {
+                        $wp->query_vars['post_type'] = $post_type;
+                    }
+                }
+            }
+        }
+    }
+}
+add_filter( 'parse_request', 'thistle_post_type_achive', PHP_INT_MAX );
