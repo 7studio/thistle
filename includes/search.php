@@ -138,4 +138,25 @@ if ( ! is_admin() ) {
 	add_filter( 'the_excerpt', 'thistle_highlight_search_terms', 999 );
 	add_filter( 'the_content', 'thistle_highlight_search_terms', 999 );
 
+    if ( ! function_exists( 'thistle_handle_empty_search_query' ) ) {
+        /**
+         * Short-circuits the search query for that returns no result
+         * if there is not searched term.
+         *
+         * By default, WordPress returns all results if there is not searched term.
+         * This behaviour has no sense.
+         *
+         * @param string   $where The WHERE clause of the query.
+         * @param WP_Query $wp_query The WP_Query instance (passed by reference).
+         * @return string
+         */
+        function thistle_handle_empty_search_query( $where, $wp_query ) {
+            if ( $wp_query->is_main_query() && $wp_query->is_search() && empty( $wp_query->query_vars['s'] ) ) {
+                $where = ' AND 0=1';
+            }
+
+            return $where;
+        }
+    }
+    add_filter( 'posts_where_request', 'thistle_handle_empty_search_query', 10, 2 );
 }
