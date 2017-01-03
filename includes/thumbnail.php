@@ -10,8 +10,10 @@ if ( ! function_exists( 'thistle_init_column_thumbnail' ) ) {
         unset( $post_types['attachment'] );
 
         foreach ( $post_types as $post_type ) {
-            add_filter( 'manage_' . $post_type . '_posts_columns', 'thistle_add_column_thumbnail', 5 );
-            add_action( 'manage_' . $post_type . '_posts_custom_column', 'thistle_manage_column_thumbnail', 5, 2 );
+            if ( post_type_supports( $post_type, 'thumbnail' ) ) {
+                add_filter( 'manage_' . $post_type . '_posts_columns', 'thistle_add_column_thumbnail', 5 );
+                add_action( 'manage_' . $post_type . '_posts_custom_column', 'thistle_manage_column_thumbnail', 5, 2 );
+            }
         }
     }
 }
@@ -32,15 +34,13 @@ if ( ! function_exists( 'thistle_add_column_thumbnail' ) ) {
             $post_type = $_GET['post_type'];
         }
 
-        if ( post_type_supports( $post_type, 'thumbnail' ) ) {
-            $post_type_object = get_post_type_object( $post_type );
+        $post_type_object = get_post_type_object( $post_type );
 
-            $last_post_column_key = array_pop( (array_keys( $posts_columns )) );
-            $last_post_column_value = array_pop( $posts_columns );
+        $last_post_column_key = array_pop( (array_keys( $posts_columns )) );
+        $last_post_column_value = array_pop( $posts_columns );
 
-            $posts_columns['thumbnail'] = $post_type_object->labels->featured_image;
-            $posts_columns[ $last_post_column_key ] = $last_post_column_value;
-        }
+        $posts_columns['thumbnail'] = $post_type_object->labels->featured_image;
+        $posts_columns[ $last_post_column_key ] = $last_post_column_value;
 
         return $posts_columns;
     }
