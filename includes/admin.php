@@ -183,3 +183,31 @@ if ( ! function_exists( 'thistle_hide_default_post_format_option' ) ) {
     }
 }
 add_action( 'admin_head-options-writing.php', 'thistle_hide_default_post_format_option' );
+
+if ( ! function_exists( 'thistle_login_headerurl' ) ) {
+    /**
+     * Sets the link URL of the header logo above login form with
+     * the Site Address. By default WordPress uses `https://wordpress.org/`.
+     *
+     * @param string $login_header_url Login header logo URL.
+     * @return string
+     */
+    function thistle_login_headerurl( $url ) {
+        return get_home_url( '/' );
+    }
+}
+add_filter( 'login_headerurl', 'thistle_login_headerurl' );
+
+if ( ! function_exists( 'thistle_login_headertitle' ) ) {
+    /**
+     * Sets the title attribute of the header logo above login form with
+     * the Site Title. By default WordPress uses "Powered by WordPress".
+     *
+     * @param string $login_header_title Login header logo title attribute.
+     * @return string
+     */
+    function thistle_login_headertitle( $title ) {
+        return get_bloginfo( 'name', 'display' );
+    }
+}
+add_filter( 'login_headertitle', 'thistle_login_headertitle' );
