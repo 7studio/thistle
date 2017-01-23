@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
-"POT-Creation-Date: 2016-09-09 10:13+0100\n"
-"PO-Revision-Date: 2016-09-09 10:16+0100\n"
+"POT-Creation-Date: 2017-01-18 16:23+0100\n"
+"PO-Revision-Date: 2017-01-18 16:24+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,8 +34,19 @@ msgstr ""
 msgid "View all"
 msgstr ""
 
-#: ../includes/thumbnail.php:35
-msgid "Thumbnail"
+#: ../includes/admin.php:43
+#, php-format
+msgid "%s "
+msgid_plural "%s "
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../includes/admin.php:254
+msgid "Maintenance"
+msgstr ""
+
+#: ../includes/admin.php:255
+msgid "Briefly unavailable for scheduled maintenance. Check back in a minute."
 msgstr ""
 
 #: ../includes/seo.php:20 ../includes/seo.php:78
@@ -48,36 +59,36 @@ msgid ""
 "and the Open Graph description of your front page (latest posts)."
 msgstr ""
 
-#: ../includes/seo.php:275
+#: ../includes/seo.php:268
 #, php-format
 msgid "%s%s, author at %s"
 msgstr ""
 
-#: ../includes/seo.php:286
+#: ../includes/seo.php:279
 msgid "Images"
 msgstr ""
 
-#: ../includes/seo.php:288
+#: ../includes/seo.php:281
 msgid "Video"
 msgstr ""
 
-#: ../includes/seo.php:290
+#: ../includes/seo.php:283
 msgid "Audio"
 msgstr ""
 
-#: ../includes/seo.php:298
+#: ../includes/seo.php:291
 #, php-format
 msgid "%d result has been found for “%s”"
 msgid_plural "%d results have been found for “%s”"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../includes/seo.php:300
+#: ../includes/seo.php:293
 #, php-format
 msgid "No results have been found for “%s”"
 msgstr ""
 
-#: ../includes/seo.php:305
+#: ../includes/seo.php:298
 msgid "Oops! We can’t seem to find the page you’re looking for"
 msgstr ""
 
@@ -89,22 +100,16 @@ msgstr ""
 msgid "Excerpt"
 msgstr ""
 
-#: ../includes/gallery-shortcode.php:197
+#: ../includes/gallery-shortcode.php:259
 msgid "No items found."
 msgstr ""
 
-#: ../includes/users.php:43
-msgctxt "User role"
-msgid "Administrator (customer)"
-msgstr ""
-
-#: ../includes/users.php:73 ../includes/users.php:74
-msgctxt "User role"
+#: ../includes/users.php:93 ../includes/users.php:94
 msgid "Administrator"
 msgstr ""
 
-#: ../includes/users.php:181
-msgid "You do not have sufficient permissions to access this page."
+#: ../includes/users.php:230
+msgid "Sorry, you are not allowed to manage options for this site."
 msgstr ""
 
 #: ../includes/back-compat.php:32
@@ -116,4 +121,15 @@ msgstr ""
 
 #: ../includes/search.php:37
 msgid "Search"
+msgstr ""
+
+#: ../includes/customize.php:20
+msgid "Color"
+msgstr ""
+
+#: ../includes/customize.php:21
+msgid ""
+"Defines the default theme color for an application. This sometimes affects "
+"how the application is displayed by the OS (e.g., on Android's task "
+"switcher, the theme color surrounds the application)."
 msgstr ""
