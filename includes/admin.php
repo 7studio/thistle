@@ -212,6 +212,56 @@ if ( ! function_exists( 'thistle_login_headertitle' ) ) {
 }
 add_filter( 'login_headertitle', 'thistle_login_headertitle' );
 
+if ( ! function_exists( 'thistle_maintenance_mode' ) ) {
+    /**
+     * Dies with a maintenance message without the `.maintenance` behaviour.
+     *
+     * By default, WordPress doesn't allow us to activate a maintenance
+     * mode easily and especially without a f***ing plugin.
+     * Plus, when this mode is enable, any user can access to the admin panel
+     * to do something (maybe it's safer for special actions).
+     *
+     * The Thistle maintenance mode is softer than the WordPress one
+     * by allowing you to switch in maintenance with a simple constant
+     * and to log in to admin panel by reaching directly `wp-login.php`.
+     *
+     * The default message can be replaced by using a drop-in
+     * (`maintenance.php` in the `wp-content` directory).
+     */
+    function thistle_soft_maintenance_mode() {
+        global $pagenow;
+
+        if ( ! file_exists( ABSPATH . '.maintenance' )
+            && defined( 'THISTLE_MAINTENANCE' ) && THISTLE_MAINTENANCE
+            && $pagenow !== 'wp-login.php'
+            && ! is_user_logged_in() )
+        {
+            wp_load_translations_early();
+
+            $server_protocol = wp_get_server_protocol();
+
+            header( "$server_protocol Service Unavailable", true, 503 );
+            header( "Content-Type: text/html; charset=utf-8" );
+
+            if ( file_exists( WP_CONTENT_DIR . '/maintenance.php' ) ) {
+                include( WP_CONTENT_DIR . '/maintenance.php' );
+            } else {
+            ?>
+                <!DOCTYPE html>
+                <meta charset="<?php bloginfo( 'charset' ); ?>">
+                <meta http-equiv="x-ua-compatible" content="ie=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title><?php _e( 'Maintenance' ); ?></title>
+                <h1 lang="<?php bloginfo( 'language' ); ?>"><?php _e( 'Briefly unavailable for scheduled maintenance. Check back in a minute.' ); ?></h1>
+            <?php
+            }
+
+            die;
+        }
+    }
+}
+add_action( 'init', 'thistle_soft_maintenance_mode' );
+
 if ( ! function_exists( 'thistle_disable_admin_email_password_change_notification' ) ) {
     /**
      * Doesn't notify the blog admin when a user changes his password.
