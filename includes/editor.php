@@ -14,7 +14,7 @@ if ( ! function_exists( 'thistle_mce_external_plugins' ) ) {
      * @return array
 	 */
 	function thistle_mce_external_plugins( $external_plugins ) {
-		$new_plugins = apply_filters( 'thistle_mce_external_plugins', array( 'table' ) );
+		$new_plugins = apply_filters( 'thistle_mce_external_plugins', array( 'table', 'template' ) );
 		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		foreach ( $new_plugins as $P ) {
@@ -78,6 +78,55 @@ if ( ! function_exists( 'thistle_tiny_mce_textcolor_map' ) ) {
 }
 add_filter( 'tiny_mce_before_init', 'thistle_tiny_mce_textcolor_map' );
 
+if ( ! function_exists( 'thistle_tiny_mce_get_templates' ) ) {
+    /**
+     * Registers all TinyMCE templates found in the `template-parts` dir
+     * with the pattern `tinymce-*.php`.
+     * Each template should have a header like WordPress page template
+     * (PHP comment at the top of the file) with at least
+     * the `Title` header, an optional `Description` header
+     * and a conditional `Post type` header. Other data headers
+     * (Author, Versions) can exist but will not be used.
+     *
+     * If the templates list is empty, the template plugin is pulled out.
+     *
+     * @link https://www.tinymce.com/docs/plugins/template/
+     *
+     * @param $mceInit array An array with TinyMCE config.
+     * @return array
+     */
+    function thistle_tiny_mce_get_templates( $mceInit ) {
+        global $typenow;
+
+        $templates = array();
+
+        $pathnames = glob( THISTLE_CHILD_PATH . '/template-parts/tinymce-*.php' );
+        if ( ! empty( $pathnames ) ) {
+            foreach ( $pathnames as $file ) {
+                $datas = get_file_data( $file, array( 'title' => 'Title', 'description' => 'Description', 'post_type' => 'Post Type' ) );
+                $datas['post_type'] = array_filter( array_map( 'trim', explode( ',', $datas['post_type'] ) ) );
+
+                if ( $datas['title'] && (in_array( $typenow, $datas['post_type'] ) || empty( $datas['post_type'] )) ) {
+                    $datas['url'] = THISTLE_CHILD_URI . '/template-parts/' . basename( $file ) . '?t=' . filemtime( $file );
+
+                    $templates[] = $datas;
+                }
+            }
+        }
+
+        if ( ! empty( $templates ) ) {
+            $mceInit['templates'] = json_encode( $templates );
+        } else {
+            $mceInit['external_plugins'] = json_decode( $mceInit['external_plugins'], true );
+            unset( $mceInit['external_plugins']['template'] );
+            $mceInit['external_plugins'] = wp_json_encode( $mceInit['external_plugins'] );
+        }
+
+        return $mceInit;
+    }
+}
+add_filter( 'tiny_mce_before_init', 'thistle_tiny_mce_get_templates' );
+
 if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
 	/**
 	 * Setups TinyMCE.
@@ -90,7 +139,7 @@ if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
         $mceInit['formats'] = preg_replace("/(?<!\"|'|\w)([a-zA-Z0-9_]+?)(?!\"|'|\w)\s?:/", "\"$1\":",  $mceInit['formats'] );
 
 		$mceInit['body_class'] = 'Wysiwyg';
-		$mceInit['toolbar1'] = 'formatselect,forecolor,|,bold,italic,strikethrough,subscript,superscript,|,alignleft,aligncenter,alignright,alignfull,|,link,unlink,anchor,|,bullist,numlist,|,blockquote,hr,|,table,|,outdent,indent,|,wp_more,wp_page,|,charmap,pastetext,removeformat,|,undo,redo,visualblocks,wp_help,|,dfw';
+		$mceInit['toolbar1'] = 'formatselect,forecolor,|,bold,italic,strikethrough,subscript,superscript,|,alignleft,aligncenter,alignright,alignfull,|,link,unlink,anchor,|,bullist,numlist,|,blockquote,hr,|,table,template,|,outdent,indent,|,wp_more,wp_page,|,charmap,pastetext,removeformat,|,undo,redo,visualblocks,wp_help,|,dfw';
 		$mceInit['toolbar2'] = '';
         $mceInit['block_formats'] = 'Titre 2=h2;Titre 3=h3;Paragraphe=p';
 
