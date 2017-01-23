@@ -89,7 +89,7 @@ if ( ! function_exists( 'thistle_enqueue_style_wpembed' ) ) {
 	function thistle_enqueue_style_wpembed() {
         $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_enqueue_style( 'thistle-embed', get_stylesheet_directory_uri() . '/assets/styles/admin/embed' . $min . '.css' );
+		wp_enqueue_style( 'thistle-embed', THISTLE_CHILD_URI . '/assets/styles/admin/embed' . $min . '.css' );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'thistle_enqueue_style_wpembed' );

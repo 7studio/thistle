@@ -155,7 +155,7 @@ if ( ! function_exists( 'thistle_setup_theme' ) ) {
 		 */
         $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		add_editor_style( array( get_stylesheet_directory_uri() . '/assets/styles/editor-style' . $min . '.css' ) );
+		add_editor_style( array( THISTLE_CHILD_URI . '/assets/styles/editor-style' . $min . '.css' ) );
 
 		/*
 		 * Enables support for some specific features of Thistle.
@@ -326,7 +326,7 @@ if ( ! function_exists( 'thistle_register_svgxuse' ) ) {
     function thistle_register_svgxuse() {
         $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-        wp_register_script( 'thistle-svgxuse', get_stylesheet_directory_uri() . '/assets/scripts/vendor/svgxuse/svgxuse' . $min . '.js', array(), null, true );
+        wp_register_script( 'thistle-svgxuse', THISTLE_CHILD_URI . '/assets/scripts/vendor/svgxuse/svgxuse' . $min . '.js', array(), null, true );
     }
 }
 add_action( 'init', 'thistle_register_svgxuse' );
