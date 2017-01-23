@@ -1,10 +1,16 @@
 <?php
 
-/**
- * Does not replace double line-breaks with paragraph elements into the excerpt output.
- * Unwraps the excerpt output from paragraph element.
- */
-remove_filter( 'the_excerpt', 'wpautop' );
+if ( ! function_exists( 'thistle_remove_excerpt_wpautop' ) ) {
+    /**
+     * Does not replace double line-breaks with paragraph elements into the excerpt output.
+     * Unwraps the excerpt output from paragraph element.
+     */
+    function thistle_remove_excerpt_wpautop() {
+        remove_filter( 'the_excerpt', 'wpautop' );
+    }
+}
+add_action( 'init', 'thistle_remove_excerpt_wpautop' );
+
 
 if ( ! function_exists( 'thistle_excerpt_more' ) ) {
 	/**
