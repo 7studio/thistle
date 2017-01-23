@@ -350,3 +350,76 @@ if ( ! function_exists( 'thistle_add_ga_tracking' ) ) {
     }
 }
 add_action( 'wp_head', 'thistle_add_ga_tracking', 9999 );
+
+if ( ! function_exists( 'thistle_robots_txt' ) ) {
+    /**
+     * Manages the `robots.txt` file content.
+     *
+     * Thistle tries to provide a better way to use this feature
+     * with the help of a multidimensional array instead of an awkward string.
+     *
+     * @param string $output Robots.txt output.
+     * @param string $public Whether the site is considered "public".
+     * @return string.
+     */
+    function thistle_robots_txt( $output, $public ) {
+        global $wp_rewrite;
+
+        $rules = array();
+
+        if ( ! $public ) {
+            $rules['*'] = array(
+                'wp-private' => "Disallow: /"
+            );
+        } else {
+            $wp_path = parse_url( site_url(), PHP_URL_PATH );
+            $content_path = parse_url( WP_CONTENT_URL, PHP_URL_PATH );
+            $uploads = wp_upload_dir( null, false, false );
+
+            $rules['*'] = array(
+                'wp-include'     => "Disallow: $wp_path/",
+                'wp-content'     => "Disallow: $content_path/",
+                'wp-admin-ajax'  => "Allow: $wp_path/wp-admin/admin-ajax.php",
+                'wp-uploads'     => "Allow: " . trailingslashit( parse_url( $uploads['baseurl'], PHP_URL_PATH ) ),
+                'wp-trackback'   => "Disallow: */trackback",
+                'wp-feed'        => "Disallow: /*/feed",
+                'wp-comments'    => "Disallow: /*/comments",
+                'wp-cgi-bin'     => "Disallow: /cgi-bin",
+
+                'files-php'      => "Disallow: /*.php$",
+                'files-inc'      => "Disallow: /*.inc$",
+                'files-gz'       => "Disallow: /*.gz",
+                'files-cgi'      => "Disallow: /*.cgi",
+
+                'thistle-params' => "Disallow: /*?",
+                'thistle-theme'  => "Allow: " . parse_url( THISTLE_CHILD_URI, PHP_URL_PATH ) . "/assets/",
+                'thistle-search' => "Disallow: /" . $wp_rewrite->search_base
+            );
+        }
+
+        /**
+         * Filters the robots.txt rules.
+         *
+         * @param array  $rules  Thistle rules for robots.txt.
+         * @param string $output Robots.txt output from WordPress.
+         * @param string $public Whether the site is considered "public".
+         */
+        $rules = apply_filters( 'thistle_robots_txt', $rules, $output, $public );
+
+        if ( ! empty( $rules ) ) {
+            $output = '';
+
+            foreach ( $rules as $key => $value ) {
+                if ( is_array( $value ) ) {
+                    $output .= "User-agent: $key\n";
+                    $output .= implode( "\n", $value ) . "\n\n";
+                } else {
+                    $output .= "$value\n\n";
+                }
+            }
+        }
+
+        return $output;
+    }
+}
+add_filter( 'robots_txt', 'thistle_robots_txt', PHP_INT_MAX, 2 );
