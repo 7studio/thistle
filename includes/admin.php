@@ -211,3 +211,13 @@ if ( ! function_exists( 'thistle_login_headertitle' ) ) {
     }
 }
 add_filter( 'login_headertitle', 'thistle_login_headertitle' );
+
+if ( ! function_exists( 'thistle_disable_admin_email_password_change_notification' ) ) {
+    /**
+     * Doesn't notify the blog admin when a user changes his password.
+     */
+    function thistle_disable_admin_email_password_change_notification() {
+        remove_action( 'after_password_reset', 'wp_password_change_notification' );
+    }
+}
+add_action( 'admin_init', 'thistle_disable_admin_email_password_change_notification' );
