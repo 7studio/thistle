@@ -240,7 +240,7 @@ if ( ! function_exists( 'thistle_maintenance_mode' ) ) {
 
             $server_protocol = wp_get_server_protocol();
 
-            header( "$server_protocol Service Unavailable", true, 503 );
+            header( "$server_protocol 503 Service Unavailable", true, 503 );
             header( "Content-Type: text/html; charset=utf-8" );
 
             if ( file_exists( WP_CONTENT_DIR . '/maintenance.php' ) ) {
