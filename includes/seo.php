@@ -377,7 +377,8 @@ if ( ! function_exists( 'thistle_robots_txt' ) ) {
             $uploads = wp_upload_dir( null, false, false );
 
             $rules['*'] = array(
-                'wp-include'     => "Disallow: $wp_path/",
+                'wp-admin'       => "Disallow: $wp_path/wp-admin/",
+                'wp-includes'    => "Disallow: $wp_path/wp-includes/",
                 'wp-content'     => "Disallow: $content_path/",
                 'wp-admin-ajax'  => "Allow: $wp_path/wp-admin/admin-ajax.php",
                 'wp-uploads'     => "Allow: " . trailingslashit( parse_url( $uploads['baseurl'], PHP_URL_PATH ) ),
@@ -395,6 +396,12 @@ if ( ! function_exists( 'thistle_robots_txt' ) ) {
                 'thistle-theme'  => "Allow: " . parse_url( THISTLE_CHILD_URI, PHP_URL_PATH ) . "/assets/",
                 'thistle-search' => "Disallow: /" . $wp_rewrite->search_base
             );
+
+            if ( ! empty( $wp_path ) ) {
+                $rules['*'] = array( 'wp-siteurl' => "Disallow: $wp_path/" ) + $rules['*'];
+
+                unset( $rules['*']['wp-admin'], $rules['*']['wp-includes'] );
+            }
         }
 
         /**
