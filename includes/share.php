@@ -65,7 +65,7 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 		$meta = array(
 			'og:type'         => 'website',
 			'og:site_name'    => get_bloginfo( 'name', 'display' ),
-			'og:url'          => trailingslashit( site_url( $wp->request ) ),
+			'og:url'          => trailingslashit( home_url( $wp->request ) ),
 			'og:title'        => wp_get_document_title(),
 			'og:description'  => thistle_get_description_meta_tag(),
 		 // 'og:image'        => THISTLE_CHILD_URI . '/assets/images/default-image.png',
