@@ -272,3 +272,18 @@ if ( ! function_exists( 'thistle_hide_slugdiv_meta_boxes' ) ) {
 }
 add_action( 'admin_head-post.php', 'thistle_hide_slugdiv_meta_boxes' );
 add_action( 'admin_head-post-new.php', 'thistle_hide_slugdiv_meta_boxes' );
+
+if ( ! function_exists( 'thistle_remove_admin_footer' ) ) {
+    /**
+     * Removes the "Thank you" text and the version/update text
+     * which are displayed in the admin footer when
+     * you are not an administrator.
+     */
+    function thistle_remove_admin_footer() {
+        if ( ! current_user_can( 'administrator' ) ) {
+            add_filter( 'admin_footer_text', '__return_empty_string' );
+            add_filter( 'update_footer', '__return_empty_string' );
+        }
+    }
+}
+add_action( 'admin_init', 'thistle_remove_admin_footer' );
