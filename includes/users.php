@@ -287,3 +287,15 @@ if ( ! function_exists( 'thistle_remove_admin_footer' ) ) {
     }
 }
 add_action( 'admin_init', 'thistle_remove_admin_footer' );
+
+if ( ! function_exists( 'thistle_remove_admin_bar_wp_logo' ) ) {
+    /**
+     * Removes the WordPress Logo from the admin bar.
+     */
+    function thistle_remove_admin_bar_wp_logo( $wp_admin_bar ) {
+        if ( ! current_user_can( 'administrator' ) ) {
+            $wp_admin_bar->remove_node( 'wp-logo' );
+        }
+    }
+}
+add_action( 'admin_bar_menu', 'thistle_remove_admin_bar_wp_logo', PHP_INT_MAX );
