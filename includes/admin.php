@@ -315,3 +315,27 @@ if ( ! function_exists( 'thistle_clear_update_right_now_text' ) ) {
     }
 }
 add_action( 'admin_init', 'thistle_clear_update_right_now_text' );
+
+if ( ! function_exists( 'thistle_redirect_wp_logout' ) ) {
+    /**
+     * Redirects the user to the current page or the home page on logout.
+     *
+     * @param string $logout_url The HTML-encoded logout URL.
+     * @param string $redirect   Path to redirect to on logout.
+     * @return string The logout URL. Note: HTML-encoded via esc_html() in wp_nonce_url().
+     */
+    function thistle_redirect_wp_logout( $logout_url, $redirect ) {
+        if ( ! empty( $redirect ) ) {
+            return $logout_url;
+        }
+
+        $redirect_to = is_admin() ? home_url() : home_url( add_query_arg( NULL, NULL ) );
+        $redirect_to = trailingslashit( $redirect_to );
+        $redirect_to = urlencode( $redirect_to );
+
+        $logout_url = add_query_arg( 'redirect_to', $redirect_to, $logout_url );
+
+        return $logout_url;
+    }
+}
+add_filter( 'logout_url', 'thistle_redirect_wp_logout', 10, 2 );
