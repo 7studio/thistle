@@ -4,7 +4,7 @@
  * Exits if accessed directly.
  */
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+    die( 'Cheatin&#8217; uh?' );
 }
 
 define( 'THISTLE_TEXT_DOMAIN', 'thistle' );
