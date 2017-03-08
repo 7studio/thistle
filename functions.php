@@ -554,6 +554,21 @@ if ( ! function_exists( 'thistle_enqueue_assets' ) ) {
 }
 add_action( 'wp_enqueue_scripts', 'thistle_enqueue_assets' );
 
+if ( ! function_exists( 'thistle_change_dependencies_default_version' ) ) {
+    /**
+     * Transforms the default version of dependencies to hide the WP version in URLs.
+     *
+     * @param WP_Styles|WP_Scripts $dependencies WP_Dependencies instance, passed by reference.
+     */
+    function thistle_change_dependencies_default_version( $dependencies ) {
+        if ( ! is_admin() ) {
+            $dependencies->default_version = md5( ABSPATH . '/wp-version/' . $dependencies->default_version );
+        }
+    }
+}
+add_action( 'wp_default_styles', 'thistle_change_dependencies_default_version', PHP_INT_MAX );
+add_action( 'wp_default_scripts', 'thistle_change_dependencies_default_version', PHP_INT_MAX );
+
 
 
 require_once THISTLE_PATH . '/includes/attachment.php';
