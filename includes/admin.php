@@ -271,3 +271,47 @@ if ( ! function_exists( 'thistle_disable_admin_email_password_change_notificatio
     }
 }
 add_action( 'admin_init', 'thistle_disable_admin_email_password_change_notification' );
+
+if ( ! function_exists( 'thistle_remove_admin_theme_page' ) ) {
+    /**
+     * Removes the "Themes" submenu pages
+     * when you haven't sufficient capabilities.
+     */
+    function thistle_remove_admin_theme_page() {
+        if ( ! current_user_can( 'install_themes' ) ) {
+            remove_submenu_page( 'themes.php', 'themes.php' );
+        }
+    }
+}
+add_action( 'admin_menu', 'thistle_remove_admin_theme_page', PHP_INT_MAX );
+
+if ( ! function_exists( 'thistle_redirect_themes_page' ) ) {
+    /**
+     * Kills WP execution and displays an error message when users try
+     * to request directly themes page and haven't sufficient
+     * capabilities.
+     *
+     * @global string $pagenow
+     */
+    function thistle_redirect_themes_page() {
+        global $pagenow;
+
+        if ( $pagenow == 'themes.php' && ! current_user_can( 'install_themes' ) ) {
+            wp_die( __( 'Sorry, you are not allowed to edit theme options on this site.' ), 403 );
+        }
+    }
+}
+add_action( 'admin_init', 'thistle_redirect_themes_page' );
+
+if ( ! function_exists( 'thistle_clear_update_right_now_text' ) ) {
+    /**
+     * Hides the theme name displayed in the "Right now" Dashboard widget when
+     * users haven't the capability to install themes.
+     */
+    function thistle_clear_update_right_now_text() {
+        if ( ! current_user_can( 'install_themes' ) ) {
+            add_filter( 'update_right_now_text', '__return_empty_string' );
+        }
+    }
+}
+add_action( 'admin_init', 'thistle_clear_update_right_now_text' );
