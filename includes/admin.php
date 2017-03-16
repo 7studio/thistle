@@ -329,8 +329,7 @@ if ( ! function_exists( 'thistle_redirect_wp_logout' ) ) {
             return $logout_url;
         }
 
-        $redirect_to = is_admin() ? home_url() : home_url( add_query_arg( NULL, NULL ) );
-        $redirect_to = trailingslashit( $redirect_to );
+        $redirect_to = is_admin() ? home_url( '/' ) : home_url( add_query_arg( NULL, NULL ) );
         $redirect_to = urlencode( $redirect_to );
 
         $logout_url = add_query_arg( 'redirect_to', $redirect_to, $logout_url );
