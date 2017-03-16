@@ -31,7 +31,7 @@ if ( ! function_exists( 'thistle_register_gallery_script' ) ) {
 
         $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_register_script( 'thistle-imagegallery', get_stylesheet_directory_uri() . '/assets/scripts/imagegallery' . $min . '.js', array(), false, true );
+		wp_register_script( 'thistle-imagegallery', THISTLE_CHILD_URI . '/assets/scripts/imagegallery' . $min . '.js', array(), null, true );
 		wp_localize_script( 'thistle-imagegallery', 'PSWP_OPTIONS', $pswp_options );
 	}
 }
