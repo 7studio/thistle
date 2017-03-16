@@ -587,3 +587,4 @@ require_once THISTLE_PATH . '/includes/users.php';
 require_once THISTLE_PATH . '/includes/admin.php';
 require_once THISTLE_PATH . '/includes/post-type.php';
 require_once THISTLE_PATH . '/includes/customize.php';
+require_once THISTLE_PATH . '/includes/paged.php';
