@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
-"POT-Creation-Date: 2017-01-18 16:23+0100\n"
-"PO-Revision-Date: 2017-01-18 16:24+0100\n"
+"POT-Creation-Date: 2017-03-16 18:37+0100\n"
+"PO-Revision-Date: 2017-03-16 18:38+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,19 +18,19 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../includes/paged.php:194
+#: ../includes/paged.php:233
 msgid "Pages:"
 msgstr ""
 
-#: ../includes/paged.php:200
+#: ../includes/paged.php:239
 msgid "Next page"
 msgstr ""
 
-#: ../includes/paged.php:201
+#: ../includes/paged.php:240
 msgid "Previous page"
 msgstr ""
 
-#: ../includes/paged.php:215
+#: ../includes/paged.php:252
 msgid "View all"
 msgstr ""
 
@@ -47,6 +47,10 @@ msgstr ""
 
 #: ../includes/admin.php:255
 msgid "Briefly unavailable for scheduled maintenance. Check back in a minute."
+msgstr ""
+
+#: ../includes/admin.php:300
+msgid "Sorry, you are not allowed to edit theme options on this site."
 msgstr ""
 
 #: ../includes/seo.php:20 ../includes/seo.php:78
@@ -96,7 +100,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: ../includes/excerpt.php:145
+#: ../includes/excerpt.php:151
 msgid "Excerpt"
 msgstr ""
 
