@@ -48,3 +48,15 @@ if ( ! function_exists( '_thistle_render_theme_color_meta_tag' ) ) {
     }
 }
 add_action( 'wp_head', '_thistle_render_theme_color_meta_tag', 100 );
+
+if ( ! function_exists( 'thistle_remove_customizer_css_section' ) ) {
+    /**
+     * Removes the additional CSS section, introduced in 4.7, from the Customizer.
+     *
+     * @param $wp_customize WP_Customize_Manager
+     */
+    function thistle_remove_customizer_css_section( $wp_customize ) {
+        $wp_customize->remove_section( 'custom_css' );
+    }
+}
+add_action( 'customize_register', 'thistle_remove_customizer_css_section', 15 );
