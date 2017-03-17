@@ -119,7 +119,7 @@ msgstr ""
 #: ../includes/back-compat.php:32
 #, php-format
 msgid ""
-"Thistle requires at least WordPress version 4.5. You are running version %s. "
+"Thistle requires at least WordPress version 4.7. You are running version %s. "
 "Please upgrade and try again."
 msgstr ""
 

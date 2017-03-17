@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
 "POT-Creation-Date: 2017-03-16 18:37+0100\n"
-"PO-Revision-Date: 2017-03-16 18:38+0100\n"
+"PO-Revision-Date: 2017-03-17 08:22+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -53,7 +53,6 @@ msgstr ""
 "un instant."
 
 #: ../includes/admin.php:300
-#, fuzzy
 msgid "Sorry, you are not allowed to edit theme options on this site."
 msgstr ""
 "Désolé, vous n’avez pas l’autorisation de gérer les options de ce site."
@@ -127,10 +126,10 @@ msgstr ""
 #: ../includes/back-compat.php:32
 #, php-format
 msgid ""
-"Thistle requires at least WordPress version 4.5. You are running version %s. "
+"Thistle requires at least WordPress version 4.7. You are running version %s. "
 "Please upgrade and try again."
 msgstr ""
-"Thistle ne fonctionne qu'à partir de WordPress 4.5. Vous utilisez la version "
+"Thistle ne fonctionne qu'à partir de WordPress 4.7. Vous utilisez la version "
 "%s. Veuillez mettre à jour et réessayer. "
 
 #: ../includes/search.php:37
