@@ -14,7 +14,7 @@ define( 'THISTLE_PATH', get_template_directory() );
 /**
  * Thistle only works in WordPress 4.7 or later.
  */
-if ( version_compare( $GLOBALS['wp_version'], '4.7', '<' ) ) {
+if ( version_compare( get_bloginfo( 'version' ), '4.7', '<' ) ) {
 	require 'includes/back-compat.php';
 }
 

@@ -29,7 +29,7 @@ add_action( 'after_switch_theme', 'thistle_switch_theme' );
  * @return string Message for an old versions of WordPress.
  */
 function thistle_back_compat_message() {
-	return sprintf( __( 'Thistle requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', THISTLE_TEXT_DOMAIN ), $GLOBALS['wp_version'] );
+	return sprintf( __( 'Thistle requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.', THISTLE_TEXT_DOMAIN ), get_bloginfo( 'version' ) );
 }
 
 /**
