@@ -338,3 +338,21 @@ if ( ! function_exists( 'thistle_redirect_wp_logout' ) ) {
     }
 }
 add_filter( 'logout_url', 'thistle_redirect_wp_logout', 10, 2 );
+
+if ( ! function_exists( 'thistle_remove_admin_bar_archive_node' ) ) {
+    /**
+     * Removes the default archive links ("View Posts") from the admin bar in
+     * favour of the Thistle one. This choice lets us have
+     * this helpful link even if the post type has not a single view.
+     *
+     * @link https://core.trac.wordpress.org/ticket/34113
+     *
+     * @global WP_Admin_Bar $wp_admin_bar
+     */
+    function thistle_remove_admin_bar_archive_node() {
+        global $wp_admin_bar;
+
+        $wp_admin_bar->remove_menu( 'archive' );
+    }
+}
+add_action( 'wp_before_admin_bar_render', 'thistle_remove_admin_bar_archive_node' );
