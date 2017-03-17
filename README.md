@@ -30,7 +30,6 @@ to work with WordPress and that I need the most :
 
 * Adds a "Thumbnail" column for post types that support the thumbnail feature;
 * Moves the excerpt meta box above the editor permanently;
-* Supports oEmbed endpoints for embeddable Facebook content;
 * Renders the specific WordPress.com shortcodes for SoundCloud and SlideShare;
 * Allows users to see a live preview of embedded content within the visual editor;
 * …
