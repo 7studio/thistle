@@ -284,23 +284,6 @@ if ( ! function_exists( 'thistle_disable_smilies' ) ) {
 }
 add_action( 'init', 'thistle_disable_smilies' );
 
-if ( ! function_exists( 'thistle_disable_opensans' ) ) {
-	/**
-	 * Removes "Open Sans" webfont loaded via Google Fonts from WP core.
-	 *
-	 * @link http://fontfeed.com/archives/google-webfonts-the-spy-inside/
-	 */
-	function thistle_disable_opensans() {
-		wp_deregister_style( 'open-sans' );
-
-		// Allows styles which have `open-sans` as dependancy to be loaded.
-		wp_register_style( 'open-sans', false );
-	}
-}
-add_action( 'admin_enqueue_scripts', 'thistle_disable_opensans' ); // Admin
-add_action( 'login_init', 'thistle_disable_opensans' ); // Login
-add_action( 'wp_enqueue_scripts', 'thistle_disable_opensans' ); // Admin Toolbar when watching site
-
 if ( ! function_exists( 'thistle_remove_postcustom_support' ) ) {
     /**
      * Removes support for Custom Fields on posts and pages.

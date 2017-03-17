@@ -21,7 +21,6 @@ to work with WordPress and that I need the most :
 **Basic** things:
 
 * Cleans `<head>` HTML element;
-* Removes "Open Sans" webfont loaded via Google Fonts from WP core;
 * Translates the base for the author and the search permalink structure depending on the locale used;
 * Discourages search engines from indexing some pages (e.g.: paged/search results)
 * …
