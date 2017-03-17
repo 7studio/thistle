@@ -252,6 +252,21 @@ if ( ! function_exists( 'thistle_clean_http_headers' ) ) {
 }
 add_action( 'init', 'thistle_clean_http_headers' );
 
+if ( ! function_exists( 'thistle_disable_rest_api' ) ) {
+    /**
+     * Disables all routes of the REST API for non logged users except
+     * the `/oembed/1.0/embed` one.
+     */
+    function thistle_disable_rest_api( $response, $server, $request ) {
+        if ( $request->get_route() != '/oembed/1.0/embed' && ! is_user_logged_in() ) {
+            return new WP_Error( 'rest_no_route', __( 'No route was found matching the URL and request method' ), array( 'status' => 404 ) );
+        }
+
+        return $response;
+    }
+}
+add_filter( 'rest_pre_dispatch', 'thistle_disable_rest_api', 10, 3 );
+
 if ( ! function_exists( 'thistle_disable_emoji' ) ) {
 	/**
 	 * Disables the emoji's feature which is enabled by default since WordPress 4.2.
