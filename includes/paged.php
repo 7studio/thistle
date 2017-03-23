@@ -160,9 +160,13 @@ if ( ! function_exists( 'thistle_adjacent_posts_rel_link' ) ) {
 
         if ( is_singular() ) {
             $page = $wp_query->get( 'page' );
+            if ( ! $page ) {
+                $page = 1;
+            }
+
             $numpages = _thistle_get_post_numpages( get_queried_object_id() );
 
-            if ( $numpages ) {
+            if ( $numpages > 1 ) {
                 $permalink = get_permalink();
 
                 if ( $page < $numpages ) {
@@ -343,27 +347,31 @@ add_filter( 'content_pagination', 'thistle_bypass_multipage_post_content', 10, 2
 
 if ( ! function_exists( 'thistle_post_multipage_rel_canonical' ) ) {
     /**
-     * Outputs rel=canonical for a post splits into multiple pages.
+     * Return the canonical URL for a post splits into multiple pages.
      *
-     * @global WP_Query $wp_query
+     * @param string  $string The post's canonical URL.
+     * @param WP_Post $post   Post object.
+     * @return string|false The canonical URL, or false if the post does not exist
+     *                       or has not been published yet.
      */
-    function thistle_post_multipage_rel_canonical() {
-        global $wp_query;
-
-        if ( is_singular() ) {
-            $page = $wp_query->get( 'page' );
-            $numpages = _thistle_get_post_numpages( get_queried_object_id() );
-
-            if ( $numpages ) {
-                $url = get_permalink( $post_id );
-                $url = add_query_arg( 'page', 'all', $url );
-
-                echo '<link rel="canonical" href="' . esc_url( $url ) . '">' . "\n";
-            }
+    function thistle_post_multipage_rel_canonical( $canonical_url, $post ) {
+        if ( ! $canonical_url ) {
+            return $canonical_url;
         }
+
+        $numpages = _thistle_get_post_numpages( $post->ID );
+
+        if ( $numpages > 1 ) {
+            $url = get_permalink( $post->ID );
+            $url = add_query_arg( 'page', 'all', $url );
+
+            return $url;
+        }
+
+        return $canonical_url;
     }
 }
-add_action( 'wp_head', 'thistle_post_multipage_rel_canonical' );
+add_action( 'get_canonical_url', 'thistle_post_multipage_rel_canonical', 10, 2 );
 
 /**
  * Returns the number of "pages" derived from the post content.
