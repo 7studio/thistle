@@ -402,3 +402,114 @@ if ( ! function_exists( 'thistle_remove_admin_bar_archive_node' ) ) {
     }
 }
 add_action( 'wp_before_admin_bar_render', 'thistle_remove_admin_bar_archive_node' );
+
+if ( ! function_exists( 'thistle_add_medium_large_size_settings' ) ) {
+    /**
+     * Adds a new field into the media settings page to manage
+     * the fourth image size: "Medium Large".
+     *
+     * Introduced by WordPress 4.4, this format has by default a `768px` width
+     * and is used for responsive images (through the `srcset` attribute).
+     * I know that it's not a good idea to define `srcset` and `size`
+     * attributes according to this site breakpoint
+     * (cf.: )
+     * but as WP handles this format (and uses space disc) without telling us,
+     * we should be able to edit it to enjoy it even for one of our breakpoints.
+     *
+     * If you want to escape this format, you just have to set its width
+     * and height to zero ;)
+     */
+    function thistle_add_medium_large_size_settings() {
+        add_settings_field(
+            'medium_large_size',
+            __( 'Large size' ),
+            '_thistle_output_medium_large_size_settings',
+            'media',
+            'default',
+            array()
+        );
+    }
+
+    function _thistle_output_medium_large_size_settings() {
+        ?>
+        <fieldset>
+            <legend class="screen-reader-text">
+                <span><?php _e( 'Large size' ); ?></span>
+            </legend>
+            <label for="medium_large_size_w"><?php _e( 'Max Width' ); ?></label>
+            <input name="medium_large_size_w" type="number" step="1" min="0" id="medium_large_size_w" value="<?php form_option( 'medium_large_size_w' ); ?>" class="small-text" />
+            <label for="medium_large_size_h"><?php _e( 'Max Height' ); ?></label>
+            <input name="medium_large_size_h" type="number" step="1" min="0" id="medium_large_size_h" value="<?php form_option( 'medium_large_size_h' ); ?>" class="small-text" />
+        </fieldset>
+        <?php
+    }
+}
+add_action( 'admin_init', 'thistle_add_medium_large_size_settings' );
+
+if ( ! function_exists( 'thistle_media_whitelist_options' ) ) {
+    /**
+     * Adds the `medium_large_size_w` and `medium_large_size_h` options
+     * to the white list to be authorised to edit them.
+     *
+     * @param array White list options.
+     * @return array.
+     */
+    function thistle_media_whitelist_options( $whitelist_options ) {
+        $whitelist_options['media'][] = 'medium_large_size_w';
+        $whitelist_options['media'][] = 'medium_large_size_h';
+
+        return $whitelist_options;
+    }
+}
+add_filter( 'whitelist_options', 'thistle_media_whitelist_options' );
+
+if ( ! function_exists( 'thistle_change_size_settings' ) ) {
+    /**
+     * Changes the order of the size settings to have "Medium Large" before
+     * "Large" and rename "Large" label into "Extra large" because we can't
+     * do it with the help of PHP.
+     */
+    function thistle_change_size_settings() {
+        ?>
+        <script>
+            ( function( window, $, undefined ) {
+                if ( typeof $ !== 'undefined' ) {
+                    $( document ).ready( function () {
+                        var $lss = $( '#large_size_w' ).parents('tr');
+                        var $mlss = $( '#medium_large_size_w' ).parents('tr');
+
+                        $lss
+                            .insertAfter($mlss)
+                            .find('th, legend span')
+                                .html('<?php _e( 'Extra large size', THISTLE_TEXT_DOMAIN ); ?>');
+                    } );
+                }
+            } )( window, window.jQuery );
+        </script>
+        <?php
+    }
+}
+add_action( 'admin_head-options-media.php', 'thistle_change_size_settings' );
+
+if ( ! function_exists( 'thistle_change_image_size_names' ) ) {
+    /**
+     * Retrieves the names and labels of the default image sizes including
+     * the fourth (or fifth) one: "Medium Large".
+     * Because we don't have a good translation for "Medium Large" in French,
+     * I decided to rename "Large" into "Extra large" and
+     * give the "Large" label to the medium_large size.
+     *
+     * @param array $size_names Array of image sizes and their names. Default values
+     *                          include 'Thumbnail', 'Medium', 'Large', 'Full Size'.
+     * @return array
+     */
+    function thistle_change_image_size_names( $size_names ) {
+        $index = array_search( 'large' , array_keys( $size_names ) );
+
+        $size_names = array_merge( array_slice( $size_names, 0, $index, true), array( 'medium_large' => _( 'Large' ) ), $size_names );
+        $size_names['large'] = _( 'Extra large', THISTLE_TEXT_DOMAIN );
+
+        return $size_names;
+    }
+}
+add_filter( 'image_size_names_choose', 'thistle_change_image_size_names' );
