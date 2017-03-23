@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
-"POT-Creation-Date: 2017-03-16 18:37+0100\n"
-"PO-Revision-Date: 2017-03-16 18:38+0100\n"
+"POT-Creation-Date: 2017-03-22 18:52+0100\n"
+"PO-Revision-Date: 2017-03-22 18:52+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,39 +18,67 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../includes/paged.php:233
+#: ../functions.php:263
+msgid "No route was found matching the URL and request method"
+msgstr ""
+
+#: ../includes/paged.php:237
 msgid "Pages:"
 msgstr ""
 
-#: ../includes/paged.php:239
+#: ../includes/paged.php:243
 msgid "Next page"
 msgstr ""
 
-#: ../includes/paged.php:240
+#: ../includes/paged.php:244
 msgid "Previous page"
 msgstr ""
 
-#: ../includes/paged.php:252
+#: ../includes/paged.php:256
 msgid "View all"
 msgstr ""
 
-#: ../includes/admin.php:43
+#: ../includes/admin.php:89
 #, php-format
 msgid "%s "
 msgid_plural "%s "
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../includes/admin.php:254
+#: ../includes/admin.php:300
 msgid "Maintenance"
 msgstr ""
 
-#: ../includes/admin.php:255
+#: ../includes/admin.php:301
 msgid "Briefly unavailable for scheduled maintenance. Check back in a minute."
 msgstr ""
 
-#: ../includes/admin.php:300
+#: ../includes/admin.php:346
 msgid "Sorry, you are not allowed to edit theme options on this site."
+msgstr ""
+
+#: ../includes/admin.php:425 ../includes/admin.php:437
+msgid "Large size"
+msgstr ""
+
+#: ../includes/admin.php:439
+msgid "Max Width"
+msgstr ""
+
+#: ../includes/admin.php:441
+msgid "Max Height"
+msgstr ""
+
+#: ../includes/admin.php:484
+msgid "Extra large size"
+msgstr ""
+
+#: ../includes/admin.php:509
+msgid "Large"
+msgstr ""
+
+#: ../includes/admin.php:510
+msgid "Extra large"
 msgstr ""
 
 #: ../includes/seo.php:20 ../includes/seo.php:78
