@@ -1,5 +1,51 @@
 <?php
 
+if ( ! function_exists( 'thistle_remove_admin_redirections' ) ) {
+    /**
+     * Forbids WordPress to redirect variety of shorthand URLs
+     * (`dashboard`, `admin` or `login`) to the admin.
+     * When users are not logged, it can be considered as
+     * a minor security issue.
+     */
+    function thistle_remove_admin_redirections() {
+        remove_action( 'template_redirect', 'wp_redirect_admin_locations', 1000 );
+    }
+}
+add_action( 'init', 'thistle_remove_admin_redirections' );
+
+if ( ! function_exists( 'thistle_redirect_admin_locations' ) ) {
+    /**
+     * Redirects a variety of shorthand URLs to the admin only when
+     * users are logged.
+     *
+     * If a user visits example.com/admin, they'll be redirected to /wp-admin.
+     *
+     * @global WP_Rewrite $wp_rewrite
+     */
+    function thistle_redirect_admin_locations() {
+        global $wp_rewrite;
+
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! ( is_404() && $wp_rewrite->using_permalinks() ) ) {
+            return;
+        }
+
+        $admins = array(
+            home_url( 'wp-admin', 'relative' ),
+            home_url( 'wp', 'relative' ),
+            home_url( 'admin', 'relative' )
+        );
+        if ( in_array( untrailingslashit( $_SERVER['REQUEST_URI'] ), $admins ) ) {
+            wp_redirect( admin_url() );
+            exit;
+        }
+    }
+}
+add_action( 'template_redirect', 'thistle_redirect_admin_locations', 1000 );
+
 if ( ! function_exists( 'thistle_remove_update_nag_admin_notice' ) ) {
     /**
      * Removes the WordPress update nag (that appears at the top of
