@@ -412,30 +412,36 @@ add_shortcode( 'slideshare', 'thistle_slideshare_shortcode');
 
 if ( ! function_exists( 'thistle_enqueue_wpembed_script' ) ) {
     /**
-     * Loads the `wp-embed` script only when the Post content contains
-     * an [embed] shortcode which is a WordPress inline HTML embed.
+     * Loads the `wp-embed` script only when needed.
      *
-     * This behaviour can be an issue if you display the full posts into a loop.
+     * It can be needed because `[embed]` is found inside the post content or
+     * because you have run manually `$wp_embed->run_shortcode`.
      *
-     * @global WP_Embed $wp_embed
+     * You could follow this way/idea to lazyload the Twitter or Facebook
+     * scripts for their widgets ;)
+     *
+     * @param mixed  $html    The cached HTML result, stored in post meta.
+     * @param string $url     The attempted embed URL.
+     * @param array  $attr    An array of shortcode attributes.
+     * @param int    $post_ID Post ID.
+     * @return string|false The embed HTML on success, otherwise the original URL.
+     *                      `->maybe_make_link()` can return false on failure.
      */
-     function thistle_enqueue_wpembed_script() {
-        global $wp_embed;
+     function thistle_enqueue_wpembed_script( $html, $url, $attr, $post_ID ) {
+        if ( ! is_admin() ) {
+            unset( $attr['discover'] );
+            $key_suffix = md5( $url . serialize( $attr ) );
+            $_oembed_data = get_post_meta( $post_ID, '_oembed_data_' . $key_suffix, true );
 
-        if ( is_single() || is_page() ) {
-            $post = get_post( null );
-
-            if ( $post && has_shortcode( $post->post_content, 'embed' ) ) {
-                 $content = $wp_embed->run_shortcode( get_the_content() );
-
-                if ( mb_strpos( $content, 'wp-embedded-content' ) !== false ) {
-                    wp_enqueue_script( 'wp-embed' );
-                }
+            if ( $_oembed_data && $_oembed_data->provider_name == 'WordPress' ) {
+                wp_enqueue_script( 'wp-embed' );
             }
         }
+
+        return $html;
      }
 }
-add_action( 'wp_head', 'thistle_enqueue_wpembed_script', 11 );
+add_filter( 'embed_oembed_html', 'thistle_enqueue_wpembed_script', 10, 4 );
 
 if ( ! function_exists( 'thistle_dequeue_wpembed_script' ) ) {
     /**
