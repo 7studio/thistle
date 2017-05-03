@@ -14,7 +14,6 @@ if ( ! function_exists( 'thistle_set_author_base' ) ) {
 	    global $wp_rewrite;
 
 	    $wp_rewrite->author_base = mb_strtolower( __( 'Author' ) );
-	    $wp_rewrite->flush_rules();
 	}
 }
 add_action( 'init', 'thistle_set_author_base' );
