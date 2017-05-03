@@ -231,6 +231,23 @@ if ( ! function_exists( 'thistle_oembed_dataparse' ) ) {
 			$data->height = 0;
 		}
 
+        /*
+         * For unknown reasons, Flickr and maybe other providers
+         * return their resources as "photo" but include at the same time
+         * extra entries required by other types (e.g.: `html`) :/
+         * The documentation about oEmbed API (http://oembed.com)
+         * is so simple that it should not be difficult to follow but it's not.
+         *
+         * In these cases, it's more interesting to include rich third party
+         * than the static one.
+         */
+        if ( $data->type == 'photo'
+            && isset( $data->html )
+            && ( ! empty( $data->html ) && is_string( $data->html ) ) )
+        {
+            $return = $data->html;
+        }
+
 		return thistle_get_embed( $return, $data->width, $data->height );
 	}
 }
