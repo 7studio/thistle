@@ -199,6 +199,29 @@ if ( ! function_exists( 'thistle_oembed_remove_maxheight' ) ) {
 }
 add_filter( 'oembed_fetch_url', 'thistle_oembed_remove_maxheight' );
 
+if ( ! function_exists( 'thistle_oembed_remove_url_trailingslash' ) ) {
+    /**
+     * Removes the trailing slash from the URL which will be fetched.
+     *
+     * Many websites render webpage with the trailing slash but don't
+     * handle it in their oEmbed API (e.g.: Giphy, Twitter, …).
+     *
+     * @param string $provider URL of the oEmbed provider.
+     * @param string $url      URL of the content to be embedded.
+     * @param array  $args     Optional arguments, usually passed from a shortcode.
+     * @return string The URL to the oEmbed provider.
+     */
+    function thistle_oembed_remove_url_trailingslash( $provider, $url, $args ) {
+        $url = untrailingslashit( $url );
+
+        $provider = remove_query_arg( 'url', $provider );
+        $provider = add_query_arg( 'url', urlencode( $url ), $provider );
+
+        return $provider;
+    }
+}
+add_filter( 'oembed_fetch_url', 'thistle_oembed_remove_url_trailingslash', 10, 3 );
+
 if ( ! function_exists( 'thistle_oembed_dataparse' ) ) {
 	/**
 	 * Overrides the returned oEmbed HTML
