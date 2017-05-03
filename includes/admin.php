@@ -1,5 +1,23 @@
 <?php
 
+if ( ! function_exists( 'thistle_redirect_wp_login' ) ) {
+    /**
+     * Redirects logged users to the admin when they go to the login
+     * page instead of leaving them in front of a login form…
+     */
+    function thistle_redirect_wp_login() {
+        global $pagenow;
+
+        if ( $pagenow == 'wp-login.php' && is_user_logged_in() && ! isset( $_GET['action'] ) ) {
+            $location = apply_filters( 'thistle_redirect_wp_login', admin_url() );
+
+            wp_redirect( $location );
+            exit;
+        }
+    }
+}
+add_action( 'init', 'thistle_redirect_wp_login' );
+
 if ( ! function_exists( 'thistle_remove_admin_redirections' ) ) {
     /**
      * Forbids WordPress to redirect variety of shorthand URLs
