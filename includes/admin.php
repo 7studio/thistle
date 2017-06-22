@@ -529,7 +529,7 @@ if ( ! function_exists( 'thistle_change_image_size_names' ) ) {
         $index = array_search( 'large' , array_keys( $size_names ) );
 
         $size_names = array_merge( array_slice( $size_names, 0, $index, true), array( 'medium_large' => _( 'Large' ) ), $size_names );
-        $size_names['large'] = _( 'Extra large', THISTLE_TEXT_DOMAIN );
+        $size_names['large'] = __( 'Extra large', THISTLE_TEXT_DOMAIN );
 
         return $size_names;
     }
