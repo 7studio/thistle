@@ -125,6 +125,11 @@ if ( ! is_admin() ) {
 			if ( $wp_query->is_main_query() && is_search() && isset( $wp_query->query_vars['search_terms'] ) && ! empty( $wp_query->query_vars['search_terms'] ) ) {
 				$search_terms = $wp_query->query_vars['search_terms'];
 
+                // Prevents from wrapping searched terms twice or more.
+                if ( mb_strpos( $text, '<mark>' ) !== false ) {
+                    return $text;
+                }
+
 				return preg_replace ('/(' . implode( '|', array_map( function( $t ) { return preg_quote( $t, '/' ); }, $search_terms ) ) . ')/iu', '<mark>$0</mark>', $text );
 			}
 
@@ -134,6 +139,31 @@ if ( ! is_admin() ) {
 	add_filter( 'the_title', 'thistle_highlight_search_terms', 999, 1 );
 	add_filter( 'the_excerpt', 'thistle_highlight_search_terms', 999 );
 	add_filter( 'the_content', 'thistle_highlight_search_terms', 999 );
+
+    if ( ! function_exists( 'thistle_unhighlight_search_terms' ) ) {
+        /**
+         * Prevents from highlighting searched terms into menu item's title
+         * when we are on a search result page archive.
+         *
+         * @global WP_Query $wp_query
+         *
+         * @param string   $title The menu item's title.
+         * @param WP_Post  $item  The current menu item.
+         * @return string
+         */
+        function thistle_unhighlight_search_terms( $text, $item ) {
+            global $wp_query;
+
+            if ( $wp_query->is_main_query() && is_search() && isset( $wp_query->query_vars['search_terms'] ) && ! empty( $wp_query->query_vars['search_terms'] ) ) {
+                $search_terms = $wp_query->query_vars['search_terms'];
+
+                return preg_replace ('/<mark>(' . implode( '|', array_map( function( $t ) { return preg_quote( $t, '/' ); }, $search_terms ) ) . ')<\/mark>/iu', '$1', $text );
+            }
+
+            return $text;
+        }
+    }
+    add_filter( 'nav_menu_item_title', 'thistle_unhighlight_search_terms', 999, 2 );
 
     if ( ! function_exists( 'thistle_handle_empty_search_query' ) ) {
         /**
