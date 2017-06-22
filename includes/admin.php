@@ -297,9 +297,13 @@ if ( ! function_exists( 'thistle_maintenance_mode' ) ) {
 
         if ( ! file_exists( ABSPATH . '.maintenance' )
             && defined( 'THISTLE_MAINTENANCE' ) && THISTLE_MAINTENANCE
-            && $pagenow !== 'wp-login.php'
             && ! is_user_logged_in() )
         {
+            if ( $pagenow === 'wp-login.php' ) {
+                remove_action( 'login_init', 'sfml_maybe_deny_login_page', 0 );
+                return;
+            }
+
             wp_load_translations_early();
 
             $server_protocol = wp_get_server_protocol();
@@ -324,7 +328,7 @@ if ( ! function_exists( 'thistle_maintenance_mode' ) ) {
         }
     }
 }
-add_action( 'init', 'thistle_soft_maintenance_mode' );
+add_action( 'init', 'thistle_soft_maintenance_mode', 0 );
 
 if ( ! function_exists( 'thistle_disable_admin_email_password_change_notification' ) ) {
     /**
