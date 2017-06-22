@@ -299,3 +299,19 @@ if ( ! function_exists( 'thistle_remove_admin_bar_wp_logo' ) ) {
     }
 }
 add_action( 'admin_bar_menu', 'thistle_remove_admin_bar_wp_logo', PHP_INT_MAX );
+
+if ( ! function_exists( 'thistle_filter_uers' ) ) {
+    /**
+     * Removes administrator users from the users listings
+     * for all users who have not the administrator role.
+     *
+     * @param WP_User_Query $query The current WP_User_Query instance,
+     *                             passed by reference.
+     */
+     function thistle_filter_uers( $query ) {
+        if ( ! current_user_can( 'administrator' ) ) {
+            $query->set( 'role__not_in', 'Administrator' );
+        }
+     }
+}
+add_filter( 'pre_get_users', 'thistle_filter_uers' );
