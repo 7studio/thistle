@@ -142,6 +142,39 @@ if ( ! function_exists( 'thistle_tiny_mce_before_init' ) ) {
 }
 add_filter( 'tiny_mce_before_init', 'thistle_tiny_mce_before_init' );
 
+if ( ! function_exists( 'thistle_set_wp_lang_attrs' ) ) {
+    /**
+     * Uses the site language instead of the user one to define
+     * the `lang` attribute on the `<html>` element of TinyMCE.
+     *
+     * @link https://core.trac.wordpress.org/ticket/40715
+     * @link https://github.com/polylang/polylang/issues/45
+     *
+     * @param $mceInit array An array with TinyMCE config.
+     * @return array
+     */
+    function thistle_set_wp_lang_attrs( $mceInit ) {
+        $lang = get_locale();
+        $lang = str_replace( '_', '-', $lang );
+
+        $mceInit['wp_lang_attr'] = $lang;
+        $mceInit['wp_user_lang_attr'] = get_bloginfo( 'language' );
+        $mceInit['setup'] = <<<JS
+function( editor ) {
+  editor.on( 'init', function() {
+      var doc = editor.getDoc();
+      var dom = editor.dom;
+
+      dom.setAttrib( doc.documentElement, 'data-user-lang', editor.getParam( 'wp_user_lang_attr' ) );
+  } );
+}
+JS;
+
+        return $mceInit;
+    }
+}
+add_filter( 'tiny_mce_before_init', 'thistle_set_wp_lang_attrs' );
+
 if ( ! function_exists( 'thistle_filter_image_link_rel' ) ) {
     /**
      * Removes all invalid values into the rel attribute before
