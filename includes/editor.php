@@ -4,7 +4,7 @@ if ( ! function_exists( 'thistle_mce_external_plugins' ) ) {
 	/**
 	 * Loads some more TinyMCE plugins.
 	 *
-	 * This hook will search into specific directory `/assets/scripts/vendor/tinymce/plugins/`
+	 * This hook will search into specific directory `/assets/vendor/tinymce/plugins/`
 	 * looking first into child theme and after parent theme.
 	 *
 	 * @link https://codex.wordpress.org/TinyMCE
@@ -17,7 +17,7 @@ if ( ! function_exists( 'thistle_mce_external_plugins' ) ) {
 		$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		foreach ( $new_plugins as $P ) {
-			$file = 'assets/scripts/vendor/tinymce/plugins/' . $P . '/plugin' . $min . '.js';
+			$file = 'assets/vendor/tinymce/plugins/' . $P . '/plugin' . $min . '.js';
 
 			if ( file_exists( get_theme_file_path( $file ) ) ) {
 				$external_plugins[ $P ] = get_theme_file_uri( $file );

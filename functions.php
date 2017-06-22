@@ -325,7 +325,7 @@ if ( ! function_exists( 'thistle_register_svgxuse' ) ) {
     function thistle_register_svgxuse() {
         $min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-        wp_register_script( 'thistle-svgxuse', THISTLE_CHILD_URI . '/assets/scripts/vendor/svgxuse/svgxuse' . $min . '.js', array(), null, true );
+        wp_register_script( 'thistle-svgxuse', THISTLE_CHILD_URI . '/assets/vendor/svgxuse/svgxuse' . $min . '.js', array(), null, true );
     }
 }
 add_action( 'init', 'thistle_register_svgxuse' );
