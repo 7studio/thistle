@@ -73,7 +73,7 @@ if ( ! function_exists( 'thistle_post_type_achive' ) ) {
      * @param WP $wp Current WordPress environment instance (passed by reference).
      */
     function thistle_post_type_achive( $wp ) {
-        if ( mb_strpos( $wp->matched_query, 'post_type=' ) === 0 ) {
+        if ( mb_strpos( $wp->matched_query, 'post_type=' ) !== false ) {
             parse_str( $wp->matched_query );
 
             if ( isset( $post_type ) && post_type_exists( $post_type ) ) {
@@ -82,7 +82,7 @@ if ( ! function_exists( 'thistle_post_type_achive' ) ) {
                 if ( ! $post_type_object->publicly_queryable
                     && $post_type_object->has_archive
                     && isset( $post_type_object->rewrite['slug'] )
-                    && $wp->matched_rule == $post_type_object->rewrite['slug'] . '/?$' )
+                    && preg_match( '/' . preg_quote( $post_type_object->rewrite['slug'], '/' ) . '/', $wp->matched_rule ) )
                 {
                     if ( isset( $wp->query_vars['post_type'] ) ) {
                         if ( is_array( $wp->query_vars['post_type'] ) ) {
