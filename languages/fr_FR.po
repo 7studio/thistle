@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
-"POT-Creation-Date: 2017-03-22 18:52+0100\n"
-"PO-Revision-Date: 2017-03-22 18:53+0100\n"
+"POT-Creation-Date: 2017-06-22 15:33+0100\n"
+"PO-Revision-Date: 2017-06-22 15:34+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -19,11 +19,41 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../functions.php:263
+#: ../functions.php:262
 msgid "No route was found matching the URL and request method"
 msgstr ""
 "Aucun itinéraire n'a été trouvé correspondant à l'URL et à la méthode de "
 "requête"
+
+#: ../template-parts/photoswipe.php:12
+#, fuzzy
+msgid "Close (Esc)"
+msgstr "Fermer (Échap)"
+
+#: ../template-parts/photoswipe.php:13
+#, fuzzy
+msgid "Share"
+msgstr "Partage"
+
+#: ../template-parts/photoswipe.php:14
+#, fuzzy
+msgid "Toggle fullscreen"
+msgstr "Passer/quitter le plein écran"
+
+#: ../template-parts/photoswipe.php:15
+#, fuzzy
+msgid "Zoom in/out"
+msgstr "Zoomer/dézoomer"
+
+#: ../template-parts/photoswipe.php:27
+#, fuzzy
+msgid "Previous (arrow left)"
+msgstr "Précédent(e) (flèche gauche)"
+
+#: ../template-parts/photoswipe.php:28
+#, fuzzy
+msgid "Next (arrow right)"
+msgstr "Suivant(e) (flèche droite)"
 
 #: ../includes/paged.php:237
 msgid "Pages:"
@@ -41,49 +71,49 @@ msgstr "Page précédente"
 msgid "View all"
 msgstr "Afficher tout"
 
-#: ../includes/admin.php:89
+#: ../includes/admin.php:107
 #, php-format
 msgid "%s "
 msgid_plural "%s "
 msgstr[0] "%s"
 msgstr[1] "%s"
 
-#: ../includes/admin.php:300
+#: ../includes/admin.php:322
 msgid "Maintenance"
 msgstr "Maintenance"
 
-#: ../includes/admin.php:301
+#: ../includes/admin.php:323
 msgid "Briefly unavailable for scheduled maintenance. Check back in a minute."
 msgstr ""
 "Indisponibilité temporaire pour cause de maintenance. Veuillez revenir dans "
 "un instant."
 
-#: ../includes/admin.php:346
+#: ../includes/admin.php:368
 msgid "Sorry, you are not allowed to edit theme options on this site."
 msgstr ""
 "Désolé, vous n’avez pas l’autorisation de gérer les options de ce site."
 
-#: ../includes/admin.php:425 ../includes/admin.php:437
+#: ../includes/admin.php:447 ../includes/admin.php:459
 msgid "Large size"
 msgstr "Grande taille"
 
-#: ../includes/admin.php:439
+#: ../includes/admin.php:461
 msgid "Max Width"
 msgstr "Largeur maximale"
 
-#: ../includes/admin.php:441
+#: ../includes/admin.php:463
 msgid "Max Height"
 msgstr "Hauteur maximale"
 
-#: ../includes/admin.php:484
+#: ../includes/admin.php:506
 msgid "Extra large size"
 msgstr "Très grande taille"
 
-#: ../includes/admin.php:509
+#: ../includes/admin.php:531
 msgid "Large"
 msgstr "Grande"
 
-#: ../includes/admin.php:510
+#: ../includes/admin.php:532
 msgid "Extra large"
 msgstr "Très grande"
 
@@ -99,36 +129,36 @@ msgstr ""
 "La description est utilisé pour remplir le <code>&lt;meta&gt;</code> "
 "description et l’Open Graph de votre page d’accueil (derniers articles)."
 
-#: ../includes/seo.php:268
+#: ../includes/seo.php:274
 #, php-format
 msgid "%s%s, author at %s"
 msgstr "%s%s, auteur pour %s"
 
-#: ../includes/seo.php:279
+#: ../includes/seo.php:285
 msgid "Images"
 msgstr "Images"
 
-#: ../includes/seo.php:281
+#: ../includes/seo.php:287
 msgid "Video"
 msgstr "Vidéos"
 
-#: ../includes/seo.php:283
+#: ../includes/seo.php:289
 msgid "Audio"
 msgstr "Audio"
 
-#: ../includes/seo.php:291
+#: ../includes/seo.php:297
 #, php-format
 msgid "%d result has been found for “%s”"
 msgid_plural "%d results have been found for “%s”"
 msgstr[0] "%d résultat correspond à la recherche « %s »"
 msgstr[1] "%d résultats correspondent à la recherche « %s »"
 
-#: ../includes/seo.php:293
+#: ../includes/seo.php:299
 #, php-format
 msgid "No results have been found for “%s”"
 msgstr "Aucun contenu n’a été trouvé pour la recherche « %s »"
 
-#: ../includes/seo.php:298
+#: ../includes/seo.php:304
 msgid "Oops! We can’t seem to find the page you’re looking for"
 msgstr "Désolé, le contenu que vous recherchez n'existe pas"
 
@@ -140,7 +170,7 @@ msgstr "Auteur"
 msgid "Excerpt"
 msgstr "Extrait"
 
-#: ../includes/gallery-shortcode.php:259
+#: ../includes/gallery-shortcode.php:162
 msgid "No items found."
 msgstr "Aucun élément trouvé."
 
@@ -162,7 +192,7 @@ msgstr ""
 "Thistle ne fonctionne qu'à partir de WordPress 4.7. Vous utilisez la version "
 "%s. Veuillez mettre à jour et réessayer. "
 
-#: ../includes/search.php:37
+#: ../includes/search.php:34
 msgid "Search"
 msgstr "Recherche"
 
