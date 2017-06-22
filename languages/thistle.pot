@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Thistle 0.1.0\n"
-"POT-Creation-Date: 2017-06-22 15:33+0100\n"
-"PO-Revision-Date: 2017-06-22 15:33+0100\n"
+"POT-Creation-Date: 2017-06-22 15:39+0100\n"
+"PO-Revision-Date: 2017-06-22 15:40+0100\n"
 "Last-Translator: Xavier Zalawa <xavier@7studio.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
-#: ../functions.php:262
+#: ../functions.php:263
 msgid "No route was found matching the URL and request method"
 msgstr ""
 
@@ -171,8 +171,8 @@ msgstr ""
 #: ../includes/back-compat.php:32
 #, php-format
 msgid ""
-"Thistle requires at least WordPress version 4.7. You are running version %s. "
-"Please upgrade and try again."
+"Thistle requires at least WordPress version %1$s. You are running version "
+"%2$s. Please upgrade and try again."
 msgstr ""
 
 #: ../includes/search.php:34

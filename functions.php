@@ -7,14 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     die( 'Cheatin&#8217; uh?' );
 }
 
+define( 'THISTLE_MIN_WP_VERSION', '4.7' );
 define( 'THISTLE_TEXT_DOMAIN', 'thistle' );
 define( 'THISTLE_URI',  get_parent_theme_file_uri() );
 define( 'THISTLE_PATH', get_parent_theme_file_path() );
 
 /**
- * Thistle only works in WordPress 4.7 or later.
+ * Thistle only works in WordPress X.Y.Z or later.
  */
-if ( version_compare( get_bloginfo( 'version' ), '4.7', '<' ) ) {
+if ( version_compare( get_bloginfo( 'version' ), THISTLE_MIN_WP_VERSION, '<=' ) ) {
 	require 'includes/back-compat.php';
 }
 
