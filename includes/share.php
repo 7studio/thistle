@@ -63,6 +63,7 @@ if ( ! function_exists( 'thistle_get_social_meta_tags' ) ) {
 		global $wp;
 
 		$meta = array(
+            'og:locale'       => get_locale(),
 			'og:type'         => 'website',
 			'og:site_name'    => get_bloginfo( 'name', 'display' ),
 			'og:url'          => trailingslashit( home_url( $wp->request ) ),
