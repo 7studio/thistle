@@ -60,6 +60,16 @@ if ( ! function_exists( 'thistle_tiny_mce_textcolor_map' ) ) {
         $textcolor_map = apply_filters( 'thistle_tiny_mce_textcolor_map', array() );
 
         if ( ! empty( $textcolor_map ) ) {
+            // associative array (hex color => name)?
+            if ( array_values( $textcolor_map ) !== $textcolor_map ) {
+                foreach ( $textcolor_map as $K => $V ) {
+                    $textcolor_map[] = $K;
+                    $textcolor_map[] = $V;
+
+                    unset( $textcolor_map[ $K ] );
+                }
+            }
+
             $mceInit['textcolor_map'] = wp_json_encode( $textcolor_map );
         } else {
             $mceInit['plugins'] = explode( ',' , $mceInit['plugins'] );
